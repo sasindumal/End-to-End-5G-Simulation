@@ -1,0 +1,4 @@
+macOS 27.0 (26A428) arm64
+lima 2.2.1
+Apple M4
+16 GB RAM

@@ -1,0 +1,185 @@
+UERANSIM v3.2.7
+[2026-10-05 17:09:21.270] [nas] [info] UE switches to state [MM-DEREGISTERED/PLMN-SEARCH]
+[2026-10-05 17:09:21.271] [rrc] [debug] New signal detected for cell[1], total [1] cells in coverage
+[2026-10-05 17:09:21.272] [nas] [info] Selected plmn[001/01]
+[2026-10-05 17:09:23.772] [rrc] [info] Selected cell plmn[001/01] tac[1] category[SUITABLE]
+[2026-10-05 17:09:23.772] [nas] [info] UE switches to state [MM-DEREGISTERED/PS]
+[2026-10-05 17:09:23.772] [nas] [info] UE switches to state [MM-DEREGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:09:23.772] [nas] [debug] Initial registration required due to [MM-DEREG-NORMAL-SERVICE]
+[2026-10-05 17:09:23.772] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:09:23.772] [nas] [debug] Sending Initial Registration
+[2026-10-05 17:09:23.772] [nas] [info] UE switches to state [MM-REGISTER-INITIATED]
+[2026-10-05 17:09:23.772] [rrc] [debug] Sending RRC Setup Request
+[2026-10-05 17:09:23.772] [rrc] [info] RRC connection established
+[2026-10-05 17:09:23.772] [rrc] [info] UE switches to state [RRC-CONNECTED]
+[2026-10-05 17:09:23.772] [nas] [info] UE switches to state [CM-CONNECTED]
+[2026-10-05 17:09:23.775] [nas] [debug] Authentication Request received
+[2026-10-05 17:09:23.775] [nas] [debug] Received SQN [000000000000]
+[2026-10-05 17:09:23.775] [nas] [debug] SQN-MS [000000000000]
+[2026-10-05 17:09:23.776] [nas] [debug] Sending Authentication Failure due to SQN out of range
+[2026-10-05 17:09:23.780] [nas] [debug] Authentication Request received
+[2026-10-05 17:09:23.780] [nas] [debug] Received SQN [000000000021]
+[2026-10-05 17:09:23.780] [nas] [debug] SQN-MS [000000000000]
+[2026-10-05 17:09:23.786] [nas] [debug] Security Mode Command received
+[2026-10-05 17:09:23.786] [nas] [debug] Selected integrity[2] ciphering[0]
+[2026-10-05 17:09:23.793] [nas] [debug] Registration accept received
+[2026-10-05 17:09:23.793] [nas] [info] UE switches to state [MM-REGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:09:23.793] [nas] [debug] Sending Registration Complete
+[2026-10-05 17:09:23.793] [nas] [info] Initial Registration is successful
+[2026-10-05 17:09:23.793] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:09:23.793] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:09:24.000] [nas] [debug] Configuration Update Command received
+[2026-10-05 17:09:24.000] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:09:40.294] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:09:40.294] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:09:40.295] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:09:56.323] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:09:56.324] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:09:56.325] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:10:12.365] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:10:12.365] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:10:12.366] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:10:28.401] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:10:28.401] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:10:28.403] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:10:44.432] [nas] [error] PDU Session Establishment procedure failure, no response from the network after 5 attempts
+[2026-10-05 17:10:44.432] [nas] [debug] Aborting SM procedure for PTI[1], PSI[1]
+[2026-10-05 17:10:45.045] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:10:45.045] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:10:45.047] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:11:01.450] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:11:01.450] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:11:01.451] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:11:17.468] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:11:17.468] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:11:17.469] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:11:33.487] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:11:33.487] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:11:33.489] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:11:49.514] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:11:49.514] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:11:49.515] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:12:05.535] [nas] [error] PDU Session Establishment procedure failure, no response from the network after 5 attempts
+[2026-10-05 17:12:05.535] [nas] [debug] Aborting SM procedure for PTI[1], PSI[1]
+[2026-10-05 17:12:06.613] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:12:06.613] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:12:06.615] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:12:23.558] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:12:23.558] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:12:23.559] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:12:39.586] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:12:39.586] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:12:39.587] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:12:55.619] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:12:55.619] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:12:55.621] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:13:11.641] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:13:11.641] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:13:11.643] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:13:27.661] [nas] [error] PDU Session Establishment procedure failure, no response from the network after 5 attempts
+[2026-10-05 17:13:27.661] [nas] [debug] Aborting SM procedure for PTI[1], PSI[1]
+[2026-10-05 17:13:28.185] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:13:28.185] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:13:28.188] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:13:44.684] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:13:44.687] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:13:44.688] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:14:00.704] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:14:00.704] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:14:00.709] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:14:16.733] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:14:16.733] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:14:16.736] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:14:32.757] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:14:32.757] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:14:32.759] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:14:48.782] [nas] [error] PDU Session Establishment procedure failure, no response from the network after 5 attempts
+[2026-10-05 17:14:48.782] [nas] [debug] Aborting SM procedure for PTI[1], PSI[1]
+[2026-10-05 17:14:49.751] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:14:49.751] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:14:49.751] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:15:05.799] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:15:05.799] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:15:05.800] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:15:21.815] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:15:21.815] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:15:21.815] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:15:37.831] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:15:37.831] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:15:37.831] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:15:53.847] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:15:53.847] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:15:53.847] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:16:09.863] [nas] [error] PDU Session Establishment procedure failure, no response from the network after 5 attempts
+[2026-10-05 17:16:09.863] [nas] [debug] Aborting SM procedure for PTI[1], PSI[1]
+[2026-10-05 17:16:10.124] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:16:10.124] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:16:10.125] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+UERANSIM v3.2.7
+[2026-10-05 17:16:33.918] [nas] [info] UE switches to state [MM-DEREGISTERED/PLMN-SEARCH]
+[2026-10-05 17:16:33.918] [rrc] [debug] New signal detected for cell[1], total [1] cells in coverage
+[2026-10-05 17:16:33.919] [nas] [info] Selected plmn[001/01]
+[2026-10-05 17:16:33.919] [rrc] [info] Selected cell plmn[001/01] tac[1] category[SUITABLE]
+[2026-10-05 17:16:33.919] [nas] [info] UE switches to state [MM-DEREGISTERED/PS]
+[2026-10-05 17:16:33.919] [nas] [info] UE switches to state [MM-DEREGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:16:33.919] [nas] [debug] Initial registration required due to [MM-DEREG-NORMAL-SERVICE]
+[2026-10-05 17:16:33.919] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:16:33.919] [nas] [debug] Sending Initial Registration
+[2026-10-05 17:16:33.919] [nas] [info] UE switches to state [MM-REGISTER-INITIATED]
+[2026-10-05 17:16:33.919] [rrc] [debug] Sending RRC Setup Request
+[2026-10-05 17:16:33.919] [rrc] [info] RRC connection established
+[2026-10-05 17:16:33.919] [rrc] [info] UE switches to state [RRC-CONNECTED]
+[2026-10-05 17:16:33.919] [nas] [info] UE switches to state [CM-CONNECTED]
+[2026-10-05 17:16:33.922] [nas] [debug] Authentication Request received
+[2026-10-05 17:16:33.923] [nas] [debug] Received SQN [000000000061]
+[2026-10-05 17:16:33.923] [nas] [debug] SQN-MS [000000000000]
+[2026-10-05 17:16:33.927] [nas] [debug] Security Mode Command received
+[2026-10-05 17:16:33.927] [nas] [debug] Selected integrity[2] ciphering[0]
+[2026-10-05 17:16:33.934] [nas] [debug] Registration accept received
+[2026-10-05 17:16:33.934] [nas] [info] UE switches to state [MM-REGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:16:33.934] [nas] [debug] Sending Registration Complete
+[2026-10-05 17:16:33.934] [nas] [info] Initial Registration is successful
+[2026-10-05 17:16:33.934] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:16:33.934] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:16:34.144] [nas] [debug] Configuration Update Command received
+[2026-10-05 17:16:34.144] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:16:49.939] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:16:49.939] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:16:49.940] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:17:05.959] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:17:05.959] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:17:05.960] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+UERANSIM v3.2.7
+[2026-10-05 17:18:15.716] [nas] [info] UE switches to state [MM-DEREGISTERED/PLMN-SEARCH]
+[2026-10-05 17:18:15.716] [rrc] [debug] New signal detected for cell[1], total [1] cells in coverage
+[2026-10-05 17:18:15.716] [nas] [info] Selected plmn[001/01]
+[2026-10-05 17:18:15.716] [rrc] [info] Selected cell plmn[001/01] tac[1] category[SUITABLE]
+[2026-10-05 17:18:15.716] [nas] [info] UE switches to state [MM-DEREGISTERED/PS]
+[2026-10-05 17:18:15.716] [nas] [info] UE switches to state [MM-DEREGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:18:15.716] [nas] [debug] Initial registration required due to [MM-DEREG-NORMAL-SERVICE]
+[2026-10-05 17:18:15.716] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:18:15.716] [nas] [debug] Sending Initial Registration
+[2026-10-05 17:18:15.716] [nas] [info] UE switches to state [MM-REGISTER-INITIATED]
+[2026-10-05 17:18:15.716] [rrc] [debug] Sending RRC Setup Request
+[2026-10-05 17:18:15.717] [rrc] [info] RRC connection established
+[2026-10-05 17:18:15.717] [rrc] [info] UE switches to state [RRC-CONNECTED]
+[2026-10-05 17:18:15.717] [nas] [info] UE switches to state [CM-CONNECTED]
+[2026-10-05 17:18:15.721] [nas] [debug] Authentication Request received
+[2026-10-05 17:18:15.721] [nas] [debug] Received SQN [000000000081]
+[2026-10-05 17:18:15.721] [nas] [debug] SQN-MS [000000000000]
+[2026-10-05 17:18:15.724] [nas] [debug] Security Mode Command received
+[2026-10-05 17:18:15.724] [nas] [debug] Selected integrity[2] ciphering[0]
+[2026-10-05 17:18:15.734] [nas] [debug] Registration accept received
+[2026-10-05 17:18:15.734] [nas] [info] UE switches to state [MM-REGISTERED/NORMAL-SERVICE]
+[2026-10-05 17:18:15.734] [nas] [debug] Sending Registration Complete
+[2026-10-05 17:18:15.734] [nas] [info] Initial Registration is successful
+[2026-10-05 17:18:15.734] [nas] [debug] Sending PDU Session Establishment Request
+[2026-10-05 17:18:15.734] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:18:15.943] [nas] [debug] Configuration Update Command received
+[2026-10-05 17:18:15.943] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:18:31.740] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:18:31.740] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:18:31.740] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]
+[2026-10-05 17:18:47.756] [nas] [warning] Retransmitting PDU Session Establishment Request due to T3580 expiry
+[2026-10-05 17:18:47.756] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2026-10-05 17:18:47.756] [nas] [error] MM status received with cause [DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED]

@@ -1,0 +1,89 @@
+ts,action,detail
+1791203711.310,scenario,S1 Baseline (each slice nominal)
+1791203711.374,qos,eMBB rate=150 delay=0 loss=0
+1791203711.425,qos,URLLC rate=20 delay=0 loss=0
+1791203711.478,qos,mIoT rate=5 delay=0 loss=0
+1791203711.688,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791203711.780,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791203711.989,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791203776.452,qos,eMBB rate=63 delay=0 loss=0.0
+1791205512.150,scenario,S2 Smart-factory peak (eMBB saturating)
+1791205516.880,scenario,S3 Degraded transport (eMBB 10 ms / 1 % loss)
+1791205516.960,qos,eMBB rate=50 delay=10 loss=1.0
+1791205517.013,qos,URLLC rate=20 delay=0 loss=0
+1791205517.062,qos,mIoT rate=5 delay=0 loss=0
+1791205517.269,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791205517.371,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205517.586,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791205521.011,scenario,S4 Massive IoT burst
+1791205521.013,traffic_stop,eMBB
+1791205521.013,traffic_stop,URLLC
+1791205521.014,traffic_stop,mIoT
+1791205521.066,qos,eMBB rate=150 delay=0 loss=0
+1791205521.119,qos,URLLC rate=20 delay=0 loss=0
+1791205521.172,qos,mIoT rate=2 delay=0 loss=0
+1791205521.276,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205521.476,traffic_start,"mIoT {'devices': 3000, 'period': 2.0}"
+1791205525.277,scenario,S2 Smart-factory peak (eMBB saturating)
+1791205525.278,traffic_stop,URLLC
+1791205525.278,traffic_stop,mIoT
+1791205525.334,qos,eMBB rate=300 delay=0 loss=0
+1791205525.390,qos,URLLC rate=20 delay=0 loss=0
+1791205525.444,qos,mIoT rate=5 delay=0 loss=0
+1791205525.658,traffic_start,"eMBB {'on': 3600, 'off': 0, 'streams': 4}"
+1791205525.740,traffic_start,"URLLC {'rate': 200, 'size': 64}"
+1791205525.950,traffic_start,"mIoT {'devices': 500, 'period': 5.0}"
+1791205533.345,scenario,S1 Baseline (each slice nominal)
+1791205533.347,traffic_stop,eMBB
+1791205533.347,traffic_stop,URLLC
+1791205533.347,traffic_stop,mIoT
+1791205533.404,qos,eMBB rate=150 delay=0 loss=0
+1791205533.458,qos,URLLC rate=20 delay=0 loss=0
+1791205533.515,qos,mIoT rate=5 delay=0 loss=0
+1791205533.693,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791205533.797,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205534.015,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791205539.399,scenario,S1 Baseline (each slice nominal)
+1791205539.405,traffic_stop,eMBB
+1791205539.408,traffic_stop,URLLC
+1791205539.409,traffic_stop,mIoT
+1791205539.467,qos,eMBB rate=150 delay=0 loss=0
+1791205539.519,qos,URLLC rate=20 delay=0 loss=0
+1791205539.574,qos,mIoT rate=5 delay=0 loss=0
+1791205539.772,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791205539.876,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205540.067,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791205547.382,scenario,S2 Smart-factory peak (eMBB saturating)
+1791205547.385,traffic_stop,eMBB
+1791205547.386,traffic_stop,URLLC
+1791205547.386,traffic_stop,mIoT
+1791205547.452,qos,eMBB rate=300 delay=0 loss=0
+1791205547.506,qos,URLLC rate=20 delay=0 loss=0
+1791205547.558,qos,mIoT rate=5 delay=0 loss=0
+1791205547.756,traffic_start,"eMBB {'on': 3600, 'off': 0, 'streams': 4}"
+1791205547.863,traffic_start,"URLLC {'rate': 200, 'size': 64}"
+1791205548.069,traffic_start,"mIoT {'devices': 500, 'period': 5.0}"
+1791205551.377,scenario,S1 Baseline (each slice nominal)
+1791205551.379,traffic_stop,eMBB
+1791205551.380,traffic_stop,URLLC
+1791205551.380,traffic_stop,mIoT
+1791205551.437,qos,eMBB rate=150 delay=0 loss=0
+1791205551.492,qos,URLLC rate=20 delay=0 loss=0
+1791205551.547,qos,mIoT rate=5 delay=0 loss=0
+1791205551.751,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791205551.856,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205552.054,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791205565.257,traffic_stop,eMBB
+1791205565.257,traffic_stop,URLLC
+1791205565.258,traffic_stop,mIoT
+1791205571.385,scenario,S1 Baseline (each slice nominal)
+1791205571.467,qos,eMBB rate=150 delay=0 loss=0
+1791205571.517,qos,URLLC rate=20 delay=0 loss=0
+1791205571.570,qos,mIoT rate=5 delay=0 loss=0
+1791205571.776,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791205571.884,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791205572.089,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791205581.817,qos,eMBB rate=63 delay=0 loss=0.0
+1791205598.355,traffic_stop,eMBB
+1791205598.359,traffic_stop,URLLC
+1791205598.366,traffic_stop,mIoT

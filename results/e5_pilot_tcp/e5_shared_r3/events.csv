@@ -1,0 +1,7 @@
+ts,action,detail
+1791202325.691,phase,shared: URLLC only
+1791202325.746,traffic_start,"URLLC {'rate': 200, 'size': 64}"
+1791202345.692,phase,shared: eMBB overload on
+1791202345.815,traffic_start,"eMBB {'on': 60, 'off': 0, 'streams': 8}"
+1791202417.696,traffic_stop,eMBB
+1791202417.696,traffic_stop,URLLC

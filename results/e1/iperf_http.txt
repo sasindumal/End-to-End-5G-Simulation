@@ -1,0 +1,59 @@
+### eMBB embb1 10.45.0.2 iperf3 downlink 5 s
+Connecting to host 192.168.100.2, port 5201
+Reverse mode, remote host 192.168.100.2 is sending
+[  5] local 10.45.0.2 port 49289 connected to 192.168.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  16.5 MBytes   138 Mbits/sec                  
+[  5]   1.00-2.00   sec  16.5 MBytes   138 Mbits/sec                  
+[  5]   2.00-3.00   sec  16.6 MBytes   139 Mbits/sec                  
+[  5]   3.00-4.00   sec  16.4 MBytes   137 Mbits/sec                  
+[  5]   4.00-5.00   sec  16.0 MBytes   134 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  84.9 MBytes   142 Mbits/sec    0             sender
+[  5]   0.00-5.00   sec  82.0 MBytes   138 Mbits/sec                  receiver
+
+iperf Done.
+
+### eMBB embb1 10.45.0.2 internet via N6 NAT
+200 0.078667s
+
+### URLLC urllc1 10.46.0.2 iperf3 downlink 5 s
+Connecting to host 192.168.100.2, port 5201
+Reverse mode, remote host 192.168.100.2 is sending
+[  5] local 10.46.0.2 port 40145 connected to 192.168.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]   1.00-2.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  5]   2.00-3.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  5]   3.00-4.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  5]   4.00-5.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  12.8 MBytes  21.4 Mbits/sec    0             sender
+[  5]   0.00-5.00   sec  11.1 MBytes  18.7 Mbits/sec                  receiver
+
+iperf Done.
+
+### URLLC urllc1 10.46.0.2 internet via N6 NAT
+200 0.071716s
+
+### mIoT miot1 10.47.0.2 iperf3 downlink 5 s
+Connecting to host 192.168.100.2, port 5201
+Reverse mode, remote host 192.168.100.2 is sending
+[  5] local 10.47.0.2 port 48271 connected to 192.168.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec   384 KBytes  3.14 Mbits/sec                  
+[  5]   1.00-2.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  5]   2.00-3.00   sec   256 KBytes  2.09 Mbits/sec                  
+[  5]   3.00-4.00   sec   128 KBytes  1.05 Mbits/sec                  
+[  5]   4.00-5.00   sec   256 KBytes  2.09 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  1.38 MBytes  2.31 Mbits/sec  188             sender
+[  5]   0.00-5.00   sec  1.25 MBytes  2.10 Mbits/sec                  receiver
+
+iperf Done.
+
+### mIoT miot1 10.47.0.2 internet via N6 NAT
+200 0.080347s

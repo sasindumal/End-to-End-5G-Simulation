@@ -1,0 +1,16 @@
+host_macos: macOS 27.0 (26A428) arm64 lima 2.2.1 Apple M4 16 GB RAM 
+guest_os: Ubuntu 24.04.5 LTS kernel 6.8.0-142-generic aarch64
+open5gs: 2.8.0~noble5
+open5gs-dbctl: v2.8.0 (misc/db/open5gs-dbctl)
+mongodb: v8.0.32
+ueransim: v3.2.7 (1d1e154)
+iperf3: 3.16
+tshark: 4.2.2
+iproute2/tc: iproute2-6.1.0,
+python: 3.12.3
+streamlit: 1.65.0
+pandas: 3.0.6
+matplotlib: 3.11.2
+numpy: 2.5.3
+yaml: 6.0.3
+gcc: 13.3.0  cmake: 3.28.3

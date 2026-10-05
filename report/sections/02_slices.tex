@@ -1,0 +1,66 @@
+\section{Slice design and parameter rationale}\label{sec:slices}
+Each service class maps to one S-NSSAI. We use the standardised SST values
+(1\,=\,eMBB, 2\,=\,URLLC, 3\,=\,MIoT~\cite{ts23501}). We add an explicit SD so that further
+tenants can later be added under the same SST. Each S-NSSAI also gets its own DNN and IPv4
+pool, so a packet's source address alone identifies its slice. That makes per-slice policing,
+capture filtering and KPI attribution trivial. Table~\ref{tab:slices} lists every parameter;
+the reasons for each choice follow.
+
+\begin{table}[H]\centering\small
+\caption{Slice configuration (\code{configs/slices.yaml}, \code{configs/open5gs/*.yaml},
+\code{scripts/30\_subscribers.sh}).}\label{tab:slices}
+\begin{tabularx}{\linewidth}{l>{\raggedright}X>{\raggedright}X>{\raggedright\arraybackslash}X}
+\toprule
+Parameter & \slice{eMBB} & \slice{URLLC} & \slice{mIoT}\\
+\midrule
+S-NSSAI (SST/SD) & 1 / 000001 & 2 / 000002 & 3 / 000003\\
+DNN / UE pool & \code{internet} / 10.45.0.0/16 & \code{urllc} / 10.46.0.0/16 & \code{iot} / 10.47.0.0/16\\
+User plane & UPF-A (shared), \code{ogstun} & \textbf{UPF-B (dedicated)}, \code{ogstun2} & UPF-A (shared), \code{ogstun3}\\
+N3 endpoint & 10.10.0.1 & 10.10.0.3 & 10.10.0.1\\
+5QI / ARP priority & 9 / 8 & 80 / 1 & 9 / 12\\
+Session-AMBR DL/UL & 200 / 50 Mbit/s & 20 / 20 Mbit/s & 2 / 2 Mbit/s\\
+Slice MBR (tc HTB) & 150 Mbit/s & 20 Mbit/s & 5 Mbit/s\\
+Added delay / loss & 0\,ms / 0\,\% (live-tunable) & 0\,ms / 0\,\% (live-tunable) & 0\,ms / 0\,\% (live-tunable)\\
+Subscribed UEs & embb1, embb2, multi & urllc1, multi & miot1, miot2\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Dedicated vs.\ shared user plane.} The URLLC slice gets its own UPF process (UPF-B)
+with its own PFCP association, GTP-U endpoint and tun device. The aim is to isolate its
+forwarding path from the bursty eMBB load, both in CPU time and in queues. In a real
+deployment the same choice lets URLLC be placed at the factory edge (local breakout) while
+eMBB/mIoT can be centralised. mIoT carries only kbit/s, so a dedicated UPF would cost resources
+for no benefit; it therefore shares UPF-A with eMBB. Experiment E5 (\S\ref{sec:e5}) tests this
+decision directly by moving URLLC onto UPF-A under eMBB overload.
+
+\paragraph{QoS parameters.} 5QI~9 is the default non-GBR class for buffered video and TCP
+traffic, which fits eMBB and telemetry. URLLC uses 5QI~80. That is the standardised
+\emph{non-GBR low-latency} class (10\,ms packet delay budget), and it needs no GBR flow
+template. Delay-critical GBR 5QIs (82--85) would require PCC rules with GBR values, which
+UERANSIM's default QoS-flow handling does not exercise. The ARP gives URLLC the highest
+priority (1) and mIoT the lowest (12). Session-AMBRs are provisioned in the UDR and delivered
+to the UE in the PDU Session Establishment Accept (verified with \code{nr-cli ps-list},
+\S\ref{sec:e1}).
+
+\paragraph{Why an extra tc layer.} Open5GS's UPF polices the Session-AMBR. We measured
+230/57\,Mbit/s for a 200/50 eMBB AMBR and 1.9\,Mbit/s for the 2\,Mbit/s mIoT AMBR with the
+tc caps lifted (\code{results/ambr\_check.txt}). However, the AMBR is \emph{per session}, is
+fixed when the session is established, and cannot express delay or loss. A software RAN also
+has no scheduler that could give one slice priority over another. We therefore implement a
+\emph{per-slice} MBR and the delay/loss ``transport'' parameters with Linux \code{tc}: an HTB
+class plus a netem child per slice, in both directions. The downlink is shaped on the slice's
+UPF tun device and the uplink on the N6 veth, with one class per UE pool. Every parameter can
+be changed live (\code{tc class/qdisc change}) without touching any UE session. This is the
+``live slice parameter'' exposed by the sandbox. The binding limit is the lower of the two:
+the tc MBR for eMBB (150\,Mbit/s) and URLLC (20\,Mbit/s), and the Session-AMBR for mIoT
+(2\,Mbit/s). The values cover the scenario's peak demand (inspection video
+$\approx$\,2$\times$50\,Mbit/s plus headroom; URLLC $\approx$100$\times$ its nominal
+0.05\,Mbit/s; mIoT far above its few kbit/s), while staying low enough to protect the other
+slices.
+
+\paragraph{Slice selection path.} The gNB advertises all three S-NSSAIs in NG~Setup. The AMF
+supports them in its PLMN list. The NSSF maps each S-NSSAI to an NSI served by the NRF. The
+SMF registers \code{info.s\_nssai} for all three. Each subscriber's UDR record lists only its
+permitted S-NSSAIs, so a UE that requests an unsubscribed slice is rejected
+(\S\ref{sec:e1}).

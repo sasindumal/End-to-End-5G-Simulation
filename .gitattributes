@@ -1,2 +1,14 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Everything executed inside Linux must keep LF endings, even in a Windows checkout
+*.sh    text eol=lf
+*.py    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.txt   text eol=lf
+*.csv   text eol=lf
+*.js    text eol=lf
+# Binary artefacts
+*.pcapng binary
+*.png    binary
+*.pdf    binary

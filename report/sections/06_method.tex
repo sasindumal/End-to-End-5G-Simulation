@@ -1,0 +1,30 @@
+\section{Experimental method}\label{sec:method}
+Every experiment is scripted in \code{experiments/run\_all.py} and starts from a known state:
+RAN stopped, core restarted, slice qdiscs reset to Table~\ref{tab:slices}, and DN services
+restarted. The traffic generators log one KPI sample per second per UE. The analysis
+aggregates per slice and per second: throughput is summed over UEs, p50 is averaged, and p99
+takes the worst UE. Phase boundaries come from the event log. The experiments follow one
+thread: \emph{does each slice meet its Table~\ref{tab:req} target on its own, under
+cross-slice load, after live re-parameterisation, and with or without a dedicated user plane?}
+
+\begin{table}[H]\centering\small
+\caption{Experiment plan.}\label{tab:exp}
+\begin{tabularx}{\linewidth}{l>{\raggedright}p{3.4cm}>{\raggedright}X>{\raggedright\arraybackslash}p{3.1cm}}
+\toprule
+ID & Question & Procedure & Output\\
+\midrule
+E1 & Do all UEs register, get the right slice/IP/UPF, and reach the DN? & capture on; start gNB + 6 UEs + negative UE; ping (10$\times$) from every PDU session; iperf3 5\,s and HTTP per slice & UE table, pcap, ping/iperf logs\\
+E2 & Is registration, session establishment and slice selection visible in signalling? & decode the E1 pcap (NGAP/NAS/PFCP/SBI) & ladder, timing, SBI tables\\
+E3 & Is URLLC/mIoT isolated from an eMBB surge? & URLLC 100\,Hz + mIoT 2$\times$500 devices for 120\,s; eMBB 2 UEs $\times$4 TCP streams in $t$=30--90\,s & RTT/loss by phase\\
+E4 & Do live slice-parameter changes take effect, and only on that slice? & all slices active 120\,s; $t$=40\,s eMBB MBR 150$\rightarrow$30\,Mbit/s; $t$=80\,s URLLC +5\,ms each way & time series around changes\\
+E5 & Is a dedicated URLLC UPF justified? & 2 runs: dedicated (UPF-B) vs shared (UPF-A); URLLC 200\,Hz; eMBB cap removed, 2 UEs $\times$8 streams in $t$=20--80\,s & RTT p99 series + CDF\\
+E6 & Do generators reproduce the temporal profiles? & scenario S1 for 90\,s & per-slice profiles\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Metrics.} RTT is measured end-to-end, UE$\leftrightarrow$DN, through RLS, gNB,
+GTP-U, UPF, tc and N6. One-way delays cannot be measured reliably because there is no shared
+clock across processes (\S\ref{sec:limits}). Throughput is the iperf3 receiver goodput at the
+UE. Loss is a missing echo/ACK after 1\,s/2\,s. Signalling latencies come from capture
+timestamps on \code{n3-core}.

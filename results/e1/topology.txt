@@ -1,0 +1,58 @@
+## ran
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+n3-ran@if5       UP             10.10.0.2/24 fe80::3c3f:2cff:fe43:9e26/64 
+uesimtun0        UNKNOWN        10.45.0.2/16 fe80::e3c7:3b87:9cb6:f56f/64 
+uesimtun1        UNKNOWN        10.45.0.3/16 fe80::8283:8c87:a0cc:ede8/64 
+uesimtun2        UNKNOWN        10.46.0.2/16 fe80::5ad4:de0:895:46e8/64 
+uesimtun3        UNKNOWN        10.47.0.2/16 fe80::583f:5c8c:66b9:5dc9/64 
+uesimtun4        UNKNOWN        10.47.0.3/16 fe80::46f2:1f45:abb8:52fd/64 
+uesimtun5        UNKNOWN        10.45.0.4/16 fe80::8a3a:16be:dd67:4e65/64 
+uesimtun6        UNKNOWN        10.46.0.3/16 fe80::2e0c:255c:29dc:379e/64 
+0:	from all lookup local
+32739:	from 10.46.0.3 lookup rt_uesimtun6
+32740:	from 10.45.0.4 lookup rt_uesimtun5
+32741:	from 10.47.0.3 lookup rt_uesimtun4
+32742:	from 10.47.0.2 lookup rt_uesimtun3
+32743:	from 10.46.0.2 lookup rt_uesimtun2
+32744:	from 10.45.0.3 lookup rt_uesimtun1
+32745:	from 10.45.0.2 lookup rt_uesimtun0
+32753:	from 10.45.0.6 lookup rt_uesimtun6
+32754:	from 10.46.0.7 lookup rt_uesimtun5
+32755:	from 10.46.0.6 lookup rt_uesimtun2
+32756:	from 10.45.0.5 lookup rt_uesimtun2
+32757:	from 10.46.0.5 lookup rt_uesimtun6
+32758:	from 10.46.0.4 lookup rt_uesimtun2
+32766:	from all lookup main
+32767:	from all lookup default
+## core
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             UP             192.168.5.15/24 metric 200 fe80::5055:55ff:fe8d:bd6f/64 
+ogstun           UP             10.45.0.1/16 2001:db8:cafe::1/48 fe80::8173:91ac:3a31:2e34/64 
+n3-core@if4      UP             10.10.0.1/24 10.10.0.3/24 fe80::4477:35ff:fe09:7ea4/64 
+n6-core@if6      UP             192.168.100.1/24 fe80::6cf4:56ff:fe5b:2bcb/64 
+ogstun2          UP             10.46.0.1/16 fe80::b236:8037:2b4b:df9d/64 
+ogstun3          UP             10.47.0.1/16 fe80::c104:20ef:79f9:8012/64 
+default via 192.168.5.2 dev eth0 proto dhcp src 192.168.5.15 metric 200 
+10.10.0.0/24 dev n3-core proto kernel scope link src 10.10.0.1 
+10.45.0.0/16 dev ogstun proto kernel scope link src 10.45.0.1 
+10.45.0.0/16 dev ogstun proto static scope link 
+10.46.0.0/16 dev ogstun2 proto kernel scope link src 10.46.0.1 
+10.47.0.0/16 dev ogstun3 proto kernel scope link src 10.47.0.1 
+192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.15 metric 200 
+192.168.5.2 dev eth0 proto dhcp scope link src 192.168.5.15 metric 200 
+192.168.100.0/24 dev n6-core proto kernel scope link src 192.168.100.1 
+## dn
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+n6-dn@if7        UP             192.168.100.2/24 fe80::8a0:65ff:fe45:3f82/64 
+default via 192.168.100.1 dev n6-dn 
+10.45.0.0/16 via 192.168.100.1 dev n6-dn 
+10.46.0.0/16 via 192.168.100.1 dev n6-dn 
+10.47.0.0/16 via 192.168.100.1 dev n6-dn 
+192.168.100.0/24 dev n6-dn proto kernel scope link src 192.168.100.2 
+## sctp
+State    Recv-Q Send-Q      Local Address:Port  Peer Address:Port Process                                  
+LISTEN   0      5               10.10.0.1:38412      0.0.0.0:*     users:(("open5gs-amfd",pid=28427,fd=11))
+ESTAB    0      0               10.10.0.1:38412    10.10.0.2:34765 users:(("open5gs-amfd",pid=28427,fd=35))
+`- ESTAB 0      0       10.10.0.1%n3-core:38412    10.10.0.2:34765 users:(("open5gs-amfd",pid=28427,fd=35))
+LISTEN   0      5      [::ffff:127.0.0.4]:3868             *:*     users:(("open5gs-smfd",pid=28377,fd=10))
+LISTEN   0      5      [::ffff:127.0.0.4]:5868             *:*     users:(("open5gs-smfd",pid=28377,fd=12))

@@ -1,0 +1,32 @@
+# Single source of truth for slice definitions (used by slice_ctl.sh, sandbox and analysis)
+slices:
+  eMBB:
+    sst: 1
+    sd: "000001"
+    dnn: internet
+    subnet: 10.45.0.0/16
+    tun: ogstun
+    upf: UPF-A (shared)
+    classid: 10
+    ues: [embb1, embb2, multi]
+    defaults: {rate_mbit: 150, delay_ms: 0, loss_pct: 0}
+  URLLC:
+    sst: 2
+    sd: "000002"
+    dnn: urllc
+    subnet: 10.46.0.0/16
+    tun: ogstun2
+    upf: UPF-B (dedicated)
+    classid: 20
+    ues: [urllc1, multi]
+    defaults: {rate_mbit: 20, delay_ms: 0, loss_pct: 0}
+  mIoT:
+    sst: 3
+    sd: "000003"
+    dnn: iot
+    subnet: 10.47.0.0/16
+    tun: ogstun3
+    upf: UPF-A (shared)
+    classid: 30
+    ues: [miot1, miot2]
+    defaults: {rate_mbit: 5, delay_ms: 0, loss_pct: 0}

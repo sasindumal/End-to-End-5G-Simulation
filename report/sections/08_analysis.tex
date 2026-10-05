@@ -1,0 +1,49 @@
+\section{Analysis: from scenario to measured result}\label{sec:analysis}
+Table~\ref{tab:thread} closes the loop from each scenario requirement (Table~\ref{tab:req})
+through the architectural mechanism that serves it to the evidence that it works.
+
+\begin{table}[H]\centering\small
+\caption{Traceability: requirement $\rightarrow$ design $\rightarrow$ traffic $\rightarrow$ measured result.}\label{tab:thread}
+\begin{tabularx}{\linewidth}{>{\raggedright}p{3.0cm}>{\raggedright}p{3.6cm}>{\raggedright}p{2.5cm}>{\raggedright\arraybackslash}X}
+\toprule
+Requirement & Mechanism (\S\ref{sec:slices}, \S\ref{sec:arch}) & Traffic & Evidence\\
+\midrule
+Three services must be logically separated & 3 S-NSSAIs, NSSF/AMF/SMF slice support, per-UE subscription & -- & Allowed/Rejected NSSAI per UE (Tab.~\ref{tab:nssai}); unsubscribed slice refused (E1)\\
+Each slice has its own anchor and addressing & DNN$\rightarrow$UPF selection, per-DNN pools and tun & ICMP per session & GTP-U to 10.10.0.1 vs 10.10.0.3 (Lst.~\ref{lst:gtpu}); PFCP 5$\times$UPF-A, 2$\times$UPF-B\\
+UE reaches the external DN & N3/N6 namespaces, DN routes, NAT & ping, iperf3, HTTP & 7/7 sessions, 0\,\% loss; 138/18.7/2.1\,Mbit/s; HTTP 200\\
+eMBB high rate but capped & HTB MBR + Session-AMBR & on/off TCP & goodput at 92--94\,\% of cap (E1, E3, E4)\\
+URLLC p99\,$<$\,10\,ms and lossless under eMBB load & dedicated UPF-B, MBR on eMBB & 100\,Hz probe & p99 0.86\,ms, worst 1.43\,ms, 0\,\% loss while eMBB at cap (E3)\\
+mIoT reliable delivery & shared UPF-A, low AMBR & Poisson, 400--1000 devices & 0\,\% loss, ACK p99 $\approx$1--2\,ms (E3)\\
+Operator can retune a slice live & tc class/qdisc change via sandbox & all slices & MBR and delay changes take effect within 1\,s, other slices unaffected (E4)\\
+Dedicated URLLC user plane worthwhile & UPF-B vs.\ shared UPF-A & UDP overload & median p99 7.9 vs.\ 12.9\,ms; 72\,\% vs.\ 35\,\% of seconds within target (E5)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{What the results mean for the scenario.} Within its normal operating envelope
+(eMBB at or below its MBR), the factory network meets every requirement of
+Table~\ref{tab:req}. The decisive mechanism is the \emph{rate cap on the aggressive slice}.
+With eMBB held at its MBR, URLLC and mIoT saw no loss and sub-2\,ms p99 even when eMBB was
+saturating (E3). Once that cap is removed and the platform is overloaded (E5), every slice
+suffers, because the gNB, the RLS link and the CPU are shared. A dedicated UPF then still
+shifts the URLLC latency distribution down, but it does not prevent loss. The practical
+lesson is that slice isolation must be enforced at \emph{every} shared resource. In this
+testbed those are the transport (tc) and the UPF. In a real network the RAN scheduler is the
+most important one, and it is precisely what a software-only RAN cannot model
+(\S\ref{sec:limits}).
+
+\paragraph{Signalling cost.} One registration plus one PDU session costs about 12 NGAP
+messages, 4 PFCP messages and about 25 distinct SBI requests per UE. The capture holds 82
+NGAP frames and 354 non-NRF SBI requests for 7 UEs, the latter seen twice via the SCP. That
+amounts to 20--30\,ms of core processing on this platform (Table~\ref{tab:sigtime}). For a
+multi-slice UE the PDU procedure runs once per S-NSSAI. Both requests are handled in
+parallel: the two PFCP sessions on UPF-A and UPF-B are created within 0.6\,ms of each other
+(Fig.~\ref{fig:ladder}). The second N2 response arrives about 200\,ms later only because of
+UERANSIM's internal timer.
+
+\paragraph{Reading the latency numbers.} The absolute RTTs (0.3--1.1\,ms median) are the
+core and transport cost only; they include no air interface. They are also modulated by the
+VM's CPU state (E7): an idle VM looks \emph{slower} than a busy one, so we only compare
+measurements taken under like-for-like load. For URLLC dimensioning, the relevant results
+are the relative ones: the 10\,ms increase produced by a 5\,ms/direction transport impairment
+(E4), and the distribution shift caused by UPF sharing (E5).

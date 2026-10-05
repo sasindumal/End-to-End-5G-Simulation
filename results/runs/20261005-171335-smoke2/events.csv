@@ -1,0 +1,14 @@
+ts,action,detail
+1791200615.387,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791200615.501,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791200615.749,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791200682.686,scenario,S1 Baseline (each slice nominal)
+1791200682.686,traffic_stop,eMBB
+1791200682.687,traffic_stop,URLLC
+1791200682.687,traffic_stop,mIoT
+1791200682.762,qos,eMBB rate=150 delay=0 loss=0
+1791200682.815,qos,URLLC rate=20 delay=0 loss=0
+1791200682.870,qos,mIoT rate=5 delay=0 loss=0
+1791200683.121,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791200683.240,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791200683.487,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"

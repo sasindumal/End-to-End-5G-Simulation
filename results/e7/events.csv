@@ -1,0 +1,6 @@
+ts,action,detail
+1791201603.468,phase,idle
+1791201603.584,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791201633.473,phase,cpu busy-loop on
+1791201663.477,phase,cpu busy-loop off
+1791201695.475,traffic_stop,URLLC
