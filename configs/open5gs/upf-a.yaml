@@ -1,0 +1,24 @@
+# UPF-A — shared user plane for eMBB (internet) and mIoT (iot)
+logger:
+  file:
+    path: /var/log/open5gs/upf-a.log
+
+global:
+  max:
+    ue: 1024
+
+upf:
+  pfcp:
+    server:
+      - address: 127.0.0.7
+  gtpu:
+    server:
+      - address: 10.10.0.1           # N3 endpoint on n3-core
+  session:
+    - {subnet: 10.45.0.0/16, gateway: 10.45.0.1, dnn: internet, dev: ogstun}
+    - {subnet: 10.47.0.0/16, gateway: 10.47.0.1, dnn: iot, dev: ogstun3}
+
+  metrics:
+    server:
+      - address: 127.0.0.7
+        port: 9090

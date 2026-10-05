@@ -1,0 +1,22 @@
+# UPF-B — dedicated user plane for the URLLC slice (isolated N3/N6 path)
+logger:
+  file:
+    path: /var/log/open5gs/upf-b.log
+
+global:
+  max:
+    ue: 1024
+
+upf:
+  pfcp:
+    server:
+      - address: 127.0.0.17
+  gtpu:
+    server:
+      - address: 10.10.0.3           # separate N3 endpoint
+  session:
+    - {subnet: 10.46.0.0/16, gateway: 10.46.0.1, dnn: urllc, dev: ogstun2}
+  metrics:
+    server:
+      - address: 127.0.0.17
+        port: 9090

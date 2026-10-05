@@ -1,0 +1,107 @@
+\section{End-to-end architecture}\label{sec:arch}
+Figure~\ref{fig:arch} shows the deployed system. A macOS host (Apple M4, 16\,GB) runs
+Lima~\cite{lima} with Apple's Virtualization framework. Lima boots one Ubuntu~24.04 arm64 VM
+(4 vCPU, 6\,GB, kernel 6.8), which supplies the Linux features that 5G software needs (SCTP,
+TUN, netns, tc). Inside the VM, three network namespaces model the three administrative
+domains:
+
+\begin{itemize}
+\item \textbf{\code{ran}}: the UERANSIM gNB and all UEs. Each UE PDU session appears as a
+  \code{uesimtun$N$} interface. Because UEs live in their own namespace, downlink packets
+  addressed to a UE cannot be short-circuited by the core's kernel; they \emph{must} pass
+  UPF\,$\rightarrow$\,GTP-U\,$\rightarrow$\,gNB.
+\item \textbf{root (core)}: the Open5GS NFs on loopback SBI addresses (HTTP/2, port 7777,
+  through the SCP), MongoDB, and the two UPFs. A veth pair (\code{n3-core}/\code{n3-ran},
+  10.10.0.0/24) carries both N2 and N3.
+\item \textbf{\code{dn}}: the external data network (192.168.100.2), reached over the N6 veth.
+  It hosts the iperf3 servers, the URLLC echo server and the IoT collector. A NAT rule also
+  gives the UE pools real Internet access.
+\end{itemize}
+
+\begin{figure}[H]\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize, >=Stealth,
+  nf/.style={draw=black!60, rounded corners=2pt, fill=white, minimum width=13mm, minimum height=6mm, align=center},
+  ue/.style={nf, minimum width=15mm},
+  upf/.style={nf, minimum width=17mm, minimum height=8mm, line width=0.9pt},
+  lbl/.style={font=\sffamily\tiny, fill=white, inner sep=1pt, text=ink2, align=center},
+  dom/.style={draw=black!25, rounded corners=4pt, inner sep=6pt}]
+% ---------------- RAN namespace
+\node[ue, draw=embb] (u1) at (0,3.2) {embb1\\\tiny 10.45.0.2};
+\node[ue, draw=embb] (u2) at (0,2.3) {embb2\\\tiny 10.45.0.3};
+\node[ue, draw=urllc] (u3) at (0,1.4) {urllc1\\\tiny 10.46.0.2};
+\node[ue, draw=miot] (u4) at (0,0.5) {miot1/2\\\tiny 10.47.0.2--3};
+\node[ue] (u5) at (0,-0.4) {multi\\\tiny eMBB+URLLC};
+\node[nf, minimum height=22mm, minimum width=14mm] (gnb) at (2.6,1.4) {gNB\\[2pt]\tiny UERANSIM\\\tiny nr-gnb\\\tiny 10.10.0.2\\\tiny 3 S-NSSAIs};
+\foreach \u in {u1,u2,u3,u4,u5} \draw[<->, dashed, black!60] (\u.east) -- (gnb.west);
+\node[lbl] at (1.3,-0.95) {Uu\,$\approx$\,RLS / UDP 4997};
+\begin{scope}[on background layer]
+\node[dom, fill=bgran, fit=(u1)(u5)(gnb), label={[font=\sffamily\scriptsize\bfseries]above:netns \texttt{ran}}] (ran) {};
+\end{scope}
+% ---------------- Core
+\node[nf] (amf) at (5.6,3.4) {AMF\\\tiny N2 10.10.0.1};
+\node[nf] (smf) at (8.0,3.4) {SMF\\\tiny 3 S-NSSAIs};
+\node[nf] (ausf) at (5.0,5.0) {AUSF};
+\node[nf] (udm) at (6.4,5.0) {UDM};
+\node[nf] (udr) at (7.8,5.0) {UDR};
+\node[nf] (pcf) at (9.2,5.0) {PCF};
+\node[nf] (nssf) at (10.6,5.0) {NSSF};
+\node[nf] (nrf) at (10.6,3.4) {NRF\\\tiny + SCP, BSF};
+\node[nf, fill=black!5] (db) at (7.8,6.2) {MongoDB\\\tiny subscribers};
+\draw[black!50] (udr) -- (db);
+\draw[black!45, line width=1.4pt] (4.6,4.25) -- (11.4,4.25);
+\node[lbl, anchor=west] at (11.45,4.25) {SBI (HTTP/2 :7777 via SCP)};
+\foreach \n in {ausf,udm,udr,pcf,nssf} \draw[black!45] (\n.south) -- (\n.south |- 0,4.25);
+\foreach \n in {amf,smf,nrf} \draw[black!45] (\n.north) -- (\n.north |- 0,4.25);
+\node[upf, draw=embb] (upfa) at (6.4,1.2) {UPF-A\\\tiny shared\\\tiny GTP-U 10.10.0.1};
+\node[upf, draw=urllc] (upfb) at (9.0,-0.2) {UPF-B\\\tiny dedicated\\\tiny GTP-U 10.10.0.3};
+\draw[<->, black!70] (smf) -- node[lbl, pos=0.45] {N4 PFCP\\127.0.0.7} (upfa);
+\draw[<->, urllc] (smf.south east) to[out=-60, in=90] node[lbl, pos=0.5] {N4 PFCP 127.0.0.17} (upfb.north);
+% N1/N2/N3
+\draw[<->, thick] (gnb.north) |- node[lbl, pos=0.75, above=1pt] {N2 NGAP/SCTP :38412\\(carries N1 NAS)} (amf.west);
+\draw[->, thick, embb] ([yshift=2pt]gnb.east) -- node[lbl, pos=0.55, above] {N3 GTP-U :2152} (upfa.west);
+\draw[->, thick, urllc] ([yshift=-14pt]gnb.east) |- node[lbl, pos=0.75, below] {N3 GTP-U :2152} (upfb.west);
+\begin{scope}[on background layer]
+\node[dom, fill=bgcore, fit=(amf)(db)(nssf)(upfa)(upfb)(nrf), inner xsep=10pt,
+  label={[font=\sffamily\scriptsize\bfseries]above:root namespace: Open5GS 5GC v2.8.0}] (core) {};
+\end{scope}
+% ---------------- tun + DN
+\node[nf, minimum width=11mm, font=\sffamily\tiny] (t1) at (11.1,1.8) {ogstun\\10.45/16};
+\node[nf, minimum width=11mm, font=\sffamily\tiny] (t3) at (11.1,1.0) {ogstun3\\10.47/16};
+\node[nf, minimum width=11mm, font=\sffamily\tiny] (t2) at (11.1,-0.2) {ogstun2\\10.46/16};
+\draw[embb] (upfa.east) -- (t1.west); \draw[miot] (upfa.east) -- (t3.west); \draw[urllc] (upfb.east) -- (t2.west);
+\node[lbl, align=center] at (11.1,2.6) {tc HTB+netem\\(DL per slice)};
+\node[nf, minimum height=26mm, minimum width=19mm, align=center] (dn) at (14.4,0.9)
+  {\textbf{Data network}\\192.168.100.2\\[2pt]\tiny iperf3 :5201--5204\\\tiny UDP echo :9000\\\tiny IoT collector :9100\\\tiny NAT $\rightarrow$ Internet};
+\draw[<->, thick] (12.0,0.9) -- node[lbl, above] {N6} node[lbl, below, align=center] {n6-core\\tc UL/slice} (dn.west);
+\foreach \tn in {t1,t2,t3} \draw[black!60] (\tn.east) -- (\tn.east -| 12.0,0) -- (12.0,0.9);
+\begin{scope}[on background layer]
+\node[dom, fill=bgdn, fit=(dn), label={[font=\sffamily\scriptsize\bfseries]above:netns \texttt{dn}}] {};
+\end{scope}
+\end{tikzpicture}}
+\caption{Deployed end-to-end architecture with all interfaces labelled. The colour of each
+user-plane path matches the slice colour used in all plots (\slice{eMBB} blue, \slice{URLLC}
+orange, \slice{mIoT} green). Everything runs inside one Ubuntu VM on the Mac host.}
+\label{fig:arch}
+\end{figure}
+
+\paragraph{Interfaces.} \textbf{Uu} is replaced by UERANSIM's \emph{Radio Link Simulation}
+(RLS): RRC/NAS and user data travel between \code{nr-ue} and \code{nr-gnb} as UDP datagrams on
+port 4997. That is the channel-simulation mode used in place of radio hardware. It has no PHY,
+no MAC scheduling and no fading; \S\ref{sec:limits} covers what that implies.
+\textbf{N1} (NAS-5GS) rides inside NGAP. \textbf{N2} is NGAP over SCTP (gNB 10.10.0.2
+$\rightarrow$ AMF 10.10.0.1:38412). \textbf{N3} is GTP-U over UDP 2152, terminating at
+10.10.0.1 (UPF-A) or 10.10.0.3 (UPF-B). The SMF chooses the UPF per PDU session, and the
+choice reaches the gNB as the UL tunnel address in PDUSessionResourceSetupRequest.
+\textbf{N4} is PFCP between the SMF (127.0.0.4) and each UPF. \textbf{N6} is the veth to the
+\code{dn} namespace. The service-based interfaces (\textbf{N8, N10, N11, N12, N13, N15, N22},
+Nnrf, Nbsf) are HTTP/2 on port 7777, using indirect communication through the SCP.
+
+\paragraph{End-to-end path of one URLLC packet.} The \code{urllc\_probe} sends from 10.46.0.2
+on \code{uesimtun2} in \code{ran}. \code{nr-ue} carries it over RLS to \code{nr-gnb}, which
+encapsulates it in GTP-U (TEID from the PDU session) towards 10.10.0.3. UPF-B decapsulates and
+writes it to \code{ogstun2}; the kernel then routes it over \code{n6-core} (tc class 1:20)
+into \code{dn}, where the echo server replies. The reply follows the same path in reverse:
+\code{ogstun2} egress (tc HTB/netem) $\rightarrow$ UPF-B $\rightarrow$ GTP-U $\rightarrow$
+gNB $\rightarrow$ RLS $\rightarrow$ UE.

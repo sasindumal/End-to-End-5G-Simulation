@@ -1,0 +1,20 @@
+# Lima VM definition for the End-to-End 5G Simulation testbed.
+# Usage (from repo root on macOS):
+#   limactl create --name=e2e5g vm/lima-5g.yaml && limactl start e2e5g
+base: template:ubuntu-24.04
+vmType: vz
+arch: aarch64
+cpus: 4
+memory: "6GiB"
+disk: "30GiB"
+mounts:
+  # repo is mounted read-write at /e2e5g inside the VM
+  - location: "/Users/sasindumalhara/Workspace/End-to-End 5G Simulation"
+    mountPoint: /e2e5g
+    writable: true
+mountType: virtiofs
+portForwards:
+  - guestPort: 8501   # Streamlit sandbox
+    hostPort: 8501
+  - guestPort: 9999   # Open5GS WebUI
+    hostPort: 9999

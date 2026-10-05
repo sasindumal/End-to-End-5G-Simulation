@@ -1,0 +1,4 @@
+ts,action,detail
+1791200585.934,traffic_start,"eMBB {'on': 20, 'off': 5, 'streams': 2}"
+1791200586.056,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791200586.334,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"

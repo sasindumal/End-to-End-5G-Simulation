@@ -1,0 +1,9 @@
+UE        SUPI                  RM-STATE       PSI  DNN       SST  SD      ADDRESS      IFACE     
+badslice  imsi-001010000000007  RM-REGISTERED  1    urllc     2    000002  null         -         
+embb1     imsi-001010000000001  RM-REGISTERED  1    internet  1    000001  10.45.0.2    uesimtun0 
+embb2     imsi-001010000000002  RM-REGISTERED  1    internet  1    000001  10.45.0.3    uesimtun1 
+miot1     imsi-001010000000004  RM-REGISTERED  1    iot       3    000003  10.47.0.2    uesimtun3 
+miot2     imsi-001010000000005  RM-REGISTERED  1    iot       3    000003  10.47.0.3    uesimtun4 
+multi     imsi-001010000000006  RM-REGISTERED  1    internet  1    000001  10.45.0.4    uesimtun5 
+multi     imsi-001010000000006  RM-REGISTERED  2    urllc     2    000002  10.46.0.3    uesimtun6 
+urllc1    imsi-001010000000003  RM-REGISTERED  1    urllc     2    000002  10.46.0.2    uesimtun2 

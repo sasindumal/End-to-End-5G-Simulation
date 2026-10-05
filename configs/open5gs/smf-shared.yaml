@@ -1,0 +1,48 @@
+# SMF — session management for all three slices; UPF chosen by DNN.
+logger:
+  file:
+    path: /var/log/open5gs/smf.log
+
+global:
+  max:
+    ue: 1024
+
+smf:
+  sbi:
+    server:
+      - address: 127.0.0.4
+        port: 7777
+    client:
+      scp:
+        - uri: http://127.0.0.200:7777
+  pfcp:
+    server:
+      - address: 127.0.0.4
+    client:
+      upf:
+        - address: 127.0.0.7          # UPF-A (shared)
+          dnn: [internet, iot, urllc]
+
+  gtpc:
+    server:
+      - address: 127.0.0.4
+  gtpu:
+    server:
+      - address: 127.0.0.4
+  metrics:
+    server:
+      - address: 127.0.0.4
+        port: 9090
+  info:
+    - s_nssai:
+        - {sst: 1, sd: 000001, dnn: [internet]}
+        - {sst: 2, sd: 000002, dnn: [urllc]}
+        - {sst: 3, sd: 000003, dnn: [iot]}
+  session:
+    - {subnet: 10.45.0.0/16, gateway: 10.45.0.1, dnn: internet}
+    - {subnet: 10.46.0.0/16, gateway: 10.46.0.1, dnn: urllc}
+    - {subnet: 10.47.0.0/16, gateway: 10.47.0.1, dnn: iot}
+  dns:
+    - 8.8.8.8
+  mtu: 1400
+  freeDiameter: /etc/freeDiameter/smf.conf

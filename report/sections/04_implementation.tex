@@ -1,0 +1,94 @@
+\section{Implementation by component}\label{sec:impl}
+Each component has a named owner who configured it and validated it on its own before
+integration (Table~\ref{tab:owners}). All configuration, scripts, sandbox and analysis code
+are in the repository (Appendix~\ref{app:repo}). The whole testbed is rebuilt from a clean
+Mac with \code{limactl create} plus five scripts.
+
+\begin{table}[H]\centering\small
+\caption{Component ownership, deliverables and individual validation evidence.}\label{tab:owners}
+\begin{tabularx}{\linewidth}{>{\raggedright}p{2.6cm}>{\raggedright}p{2.6cm}>{\raggedright}X>{\raggedright\arraybackslash}X}
+\toprule
+Component & Owner & Main artefacts & Individual validation\\
+\midrule
+Core -- control plane & \memberA & \code{amf, smf, nssf, nrf, ausf, udm, udr, pcf, bsf, scp .yaml}; \code{20\_core.sh} & all NFs register at NRF; NG Setup accepted; Allowed NSSAI in Registration Accept\\
+Core -- user plane & \memberB & \code{upf-a.yaml}, \code{upf-b.yaml}, SMF UPF selection, \code{10\_netns.sh} (N3/N6, tun, NAT) & PFCP association with both UPFs; PFCP Session Establishment to the right UPF per DNN\\
+Radio access network & \memberC & \code{gnb.yaml}, RAN namespace, \code{40\_ran.sh} & SCTP association + NGSetupResponse; per-UE PDUSessionResourceSetup\\
+UE \& provisioning & \memberD & \code{gen\_ues.sh} (7 UE configs), \code{30\_subscribers.sh}, \code{ue\_cfg.py}, \code{ue\_table.sh} & 6 UEs RM-REGISTERED with 7 PDU sessions; negative UE rejected\\
+Traffic generation & \memberE & \code{embb.py}, \code{urllc\_probe.py}, \code{miot\_client.py}, DN servers & per-slice KPI CSVs; on/off, periodic and Poisson profiles verified (Fig.~\ref{fig:e6})\\
+Signalling analysis & \memberF & \code{50\_capture.sh}, \code{analysis/analyze.py} & decoded call flow, timing and SBI tables (\S\ref{sec:e2})\\
+Sandbox application & \memberG & \code{sandbox/app.py}, \code{testbed.py}, \code{slice\_ctl.sh} & every control exercised from the UI (\S\ref{sec:sandbox})\\
+Platform \& integration & \memberH & \code{vm/lima-5g.yaml}, \code{00\_provision.sh}, \code{experiments/run\_all.py}, \code{versions.sh} & clean rebuild; scripted E1--E6\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Core network -- control plane (\memberA)}
+Open5GS~2.8.0~\cite{open5gs} was installed from the project's PPA (arm64 build). The NFs are
+not run as the packaged systemd units. \code{20\_core.sh} starts them in dependency order
+(NRF $\rightarrow$ SCP $\rightarrow$ AUSF/UDM/UDR/PCF/NSSF/BSF $\rightarrow$ UPFs
+$\rightarrow$ SMF $\rightarrow$ AMF) from the repository configs, so that every parameter is
+under version control. The configs deviate from the defaults as follows. The PLMN is changed
+to the test PLMN 001/01. The AMF binds NGAP to 10.10.0.1 and supports three S-NSSAIs. Its
+integrity order is NIA2$>$NIA1 and its ciphering order is \emph{NEA0 first}, so NAS stays
+readable in captures (the integrity protection is still checked). The NSSF has one NSI per
+S-NSSAI, and the SMF advertises \code{info.s\_nssai} for all three slices. MongoDB~8.0 holds
+the subscriber records.
+
+\subsection{Core network -- user plane (\memberB)}
+Two \code{open5gs-upfd} instances run with separate PFCP (127.0.0.7 / 127.0.0.17), GTP-U
+(10.10.0.1 / 10.10.0.3) and metrics addresses. The SMF selects the UPF by DNN
+(\code{pfcp.client.upf[].dnn}). A second SMF/UPF-A configuration pair (\code{smf-shared.yaml},
+\code{upf-a-shared.yaml}) puts URLLC on UPF-A for the shared-UPF experiment. Pool addressing
+lives in both the SMF and the UPF \code{session} lists, with an explicit \code{dev} so that
+each DNN uses its own tun device. \code{10\_netns.sh} creates the tun devices persistently, so
+the tc qdiscs survive UPF restarts. It also sets the DN return routes and the NAT.
+
+\subsection{Radio access network (\memberC)}
+UERANSIM~v3.2.7~\cite{ueransim} was built from source (gcc~13.3, CMake~3.28). The gNB
+(\code{nci 0x10}, TAC~1, 32-bit gNB-ID) runs in the \code{ran} namespace. It binds its RLS
+side to 127.0.0.1 and its N2/N3 side to 10.10.0.2. It lists all three S-NSSAIs; without
+this, the AMF would reject NG Setup for unsupported slices. \code{ignoreStreamIds} works
+around Open5GS's SCTP stream allocation.
+
+\subsection{User equipment and provisioning (\memberD)}
+\code{gen\_ues.sh} writes one UE config per subscriber from a single template, which avoids
+copy-paste drift. Each config holds the SUPI, K, OPc, null-scheme SUCI, the sessions (DNN +
+S-NSSAI), the configured/default NSSAI and the algorithms. \code{30\_subscribers.sh} creates
+the matching UDR records with \code{open5gs-dbctl} and then writes the per-slice QoS profile
+(5QI, ARP, Session-AMBR) into each session with \code{mongosh}. Seven subscribers exist: two
+eMBB, one URLLC, two mIoT gateways, one \emph{multi-slice} UE subscribed to eMBB+URLLC (it
+holds two concurrent PDU sessions on two UPFs), and one negative-test UE subscribed only to
+eMBB that requests URLLC. At start-up \code{ue\_cfg.py} derives each UE's runtime config,
+keeping only the sessions of slices that are administratively up (\S\ref{sec:sandbox}).
+
+\subsection{Traffic generation (\memberE)}\label{sec:traffic}
+Each service class has a generator that matches its temporal profile. All generators write one
+KPI row per second (\code{traffic/kpi.py}) and bind to the UE's PDU-session address, so all
+traffic enters the 5G user plane.
+\begin{itemize}
+\item \textbf{eMBB} (\code{embb.py}): wraps iperf3~3.16~\cite{iperf3} in reverse (downlink)
+  mode with $N$ parallel TCP streams in an on/off cycle (default 20\,s/5\,s). It parses the
+  per-second rate and logs explicit zeros during off periods.
+\item \textbf{URLLC} (\code{urllc\_probe.py}): sends sequence-numbered, timestamped 64-byte
+  UDP packets at a fixed rate (100\,Hz by default) to the DN echo server. It uses
+  \code{select()} so that echoes are timestamped on arrival, and reports per-second RTT p50,
+  p99, jitter (mean $|\Delta\text{RTT}|$) and loss (no echo within 1\,s).
+\item \textbf{mIoT} (\code{miot\_client.py}): simulates $D$ sensors behind one gateway UE. Each
+  sends a JSON report with exponential inter-arrival times (mean $P$); the collector returns a
+  16-byte ACK. It reports reports/s, ACK latency and loss (no ACK within 2\,s).
+\end{itemize}
+
+\subsection{Signalling capture and analysis (\memberF)}
+\code{50\_capture.sh} runs \code{tshark} on \code{n3-core} (N2, N3) and \code{lo} (SBI, N4).
+The capture filter is SCTP, UDP 2152/8805 and TCP 7777. \code{analysis/analyze.py} decodes it
+with \code{nas-5gs.null\_decipher} and \code{-d tcp.port==7777,http2}. It extracts per-UE
+procedure timing (keyed on RAN-UE-NGAP-ID and SUCI MSIN), PFCP sessions per UPF and SBI
+operations. It also draws the message ladder and every KPI figure from the CSVs.
+
+\subsection{Platform and integration (\memberH)}
+\code{vm/lima-5g.yaml} defines the VM. It mounts the repository at \code{/e2e5g} (virtiofs)
+and forwards port 8501 (sandbox) to the Mac. \code{00\_provision.sh} is idempotent and
+installs every dependency. \code{experiments/run\_all.py} restarts the testbed into a known
+state before each experiment and drives the same \code{testbed.py} API that the sandbox uses,
+so demo and measurements share one code path. \code{versions.sh} records the exact versions
+(Appendix~\ref{app:versions}).

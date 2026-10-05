@@ -1,0 +1,26 @@
+\section{Challenges and resolutions}\label{sec:challenges}
+\begin{table}[H]\centering\small
+\caption{Problems met during implementation and integration, in the order encountered.}\label{tab:challenges}
+\begin{tabularx}{\linewidth}{>{\raggedright}p{4.3cm}>{\raggedright}X>{\raggedright\arraybackslash}p{4.4cm}}
+\toprule
+Challenge & Root cause & Resolution\\
+\midrule
+No Linux kernel on the Mac (SCTP, TUN, netns, tc needed) & macOS lacks these features; Docker Desktop is not installed and images are mostly amd64 & Lima VM (Apple Virtualization, arm64 Ubuntu); native arm64 packages, no emulation\\
+Homebrew refused to install Lima & Xcode licence not accepted (needs \code{sudo}) & a team member accepted the licence once; documented in the README\\
+Provisioning script failed half-way with a syntax error & the script was edited while bash was still executing it (bash reads scripts incrementally) & re-ran the idempotent script; never edit a running script\\
+\code{open5gs-dbctl} not found & not shipped in the Ubuntu \code{.deb} & fetched from the matching v2.8.0 tag in \code{00\_provision.sh}\\
+\code{update\_slice} created sessions without QoS/AMBR & helper only writes the DNN & \code{mongosh} pass sets 5QI/ARP/AMBR for every session by DNN\\
+GBR 5QI~82 risky for URLLC default flow & GBR needs GBR/MBR values and PCC rules & switched to non-GBR low-latency 5QI~80\\
+Downlink could bypass the UPF & UE and core on the same host: replies to a local UE address are delivered locally & UEs/gNB moved into netns \code{ran}; verified with GTP-U in the capture\\
+URLLC RTT appeared to be 20\,ms & probe only read echoes on its 10\,ms send tick & \code{select()} until the next deadline; RTT timestamped on arrival\\
+``Slice down'' did not stay down & UERANSIM re-establishes configured sessions $\approx$200\,ms after release & admin state + switch-off deregistration + re-attach with filtered config\\
+No NAS details in Wireshark after Security Mode & integrity-protected NAS with NEA0 is not shown by default & \code{nas-5gs.null\_decipher:TRUE}; AMF ciphering order NEA0 first\\
+\code{tshark} display filter rejected & Wireshark 4.2 needs commas in set syntax & \code{pfcp.msg\_type in \{50,51,52,53\}}\\
+DNS failed inside UE namespace & \code{ran} netns cannot reach the VM's stub resolver & resolve in the core netns, pass \code{curl --resolve}\\
+eMBB throughput spikes in plots & iperf3's trailing partial interval and duplicate samples per second & drop intervals $<$0.5\,s; average per UE before summing\\
+URLLC faster under load than idle & VM CPU idle-state wake-up latency & control experiment E7; compare only like-for-like CPU states\\
+First E5 run inconclusive & TCP eMBB load varied 270--1600\,Mbit/s between runs (AMBR, TCP dynamics), confounding the comparison & fixed-rate UDP load, AMBR lifted, 3 alternating repetitions per mode\\
+Stale UE routes after restarts & UERANSIM leaves its \code{ip rule} entries in netns \code{ran} & \code{stop\_ran.sh} flushes them\\
+\bottomrule
+\end{tabularx}
+\end{table}

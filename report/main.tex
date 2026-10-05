@@ -1,0 +1,71 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[a4paper,margin=2.1cm]{geometry}
+\usepackage{fontspec}   % Tectonic = XeTeX: Unicode (±, –, ×, →) in generated tables
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,arrows.meta,backgrounds,calc,shapes.geometric}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
+\input{members.tex}
+
+% Palette (same categorical slots as the plots: eMBB, URLLC, mIoT)
+\definecolor{embb}{HTML}{2A78D6}
+\definecolor{urllc}{HTML}{EB6834}
+\definecolor{miot}{HTML}{1BAF7A}
+\definecolor{ink2}{HTML}{52514E}
+\definecolor{bgran}{HTML}{EEF4FB}
+\definecolor{bgcore}{HTML}{F4F3F0}
+\definecolor{bgdn}{HTML}{EEF8F3}
+\definecolor{codebg}{HTML}{F7F7F5}
+
+\lstset{basicstyle=\ttfamily\scriptsize, backgroundcolor=\color{codebg}, frame=single,
+  rulecolor=\color{black!15}, breaklines=true, columns=fullflexible, keepspaces=true,
+  showstringspaces=false, xleftmargin=2pt, xrightmargin=2pt, aboveskip=6pt, belowskip=6pt}
+\setlist{itemsep=1pt, topsep=3pt}
+\captionsetup{font=small, labelfont=bf}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.12}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\slice}[1]{\textsf{#1}}
+
+\title{\textbf{End-to-End 5G Network Slicing on a Software-Only Testbed}\\[4pt]
+\large Open5GS 5GC, UERANSIM RAN/UE and per-slice user planes for a smart-factory scenario}
+\author{\groupname\\[2pt]\small \memberA, \memberB, \memberC, \memberD,\\
+\small \memberE, \memberF, \memberG, \memberH}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+\input{sections/00_abstract}
+\tableofcontents
+\vspace{4pt}
+\input{sections/01_scenario}
+\input{sections/02_slices}
+\input{sections/03_architecture}
+\input{sections/04_implementation}
+\input{sections/05_sandbox}
+\input{sections/06_method}
+\input{sections/07_results}
+\input{sections/08_analysis}
+\input{sections/09_limitations}
+\input{sections/10_challenges}
+\input{sections/11_conclusion}
+\bibliographystyle{unsrt}
+\bibliography{refs}
+\appendix
+\input{sections/12_appendix}
+\end{document}

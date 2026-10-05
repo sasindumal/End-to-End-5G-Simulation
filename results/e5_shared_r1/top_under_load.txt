@@ -1,0 +1,22 @@
+top - 17:53:36 up 51 min,  1 user,  load average: 7.53, 3.60, 2.48
+Tasks: 161 total,   1 running, 155 sleeping,   0 stopped,   5 zombie
+%Cpu(s): 66.8 us, 21.0 sy,  0.0 ni,  0.0 id,  0.0 wa,  0.0 hi, 12.2 si,  0.0 st 
+MiB Mem :   5911.3 total,   1175.6 free,   1280.7 used,   3654.2 buff/cache     
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.   4630.6 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+  41264 root      20   0   40332   2148   1564 S 166.7   0.0   0:47.27 iperf3
+  41266 root      20   0   40332   2156   1572 S 150.2   0.0   0:48.24 iperf3
+  41051 root      20   0  368864  34312   8668 S  41.8   0.6   0:13.92 open5gs-upfd
+  41130 root      20   0  758268  11500   6980 S  20.4   0.2   0:12.21 nr-gnb
+  41169 root      20   0  878092 213496   5584 S   7.5   3.5   0:04.06 nr-ue
+  41146 root      20   0  812556 168944   5584 S   6.5   2.8   0:05.13 nr-ue
+  25869 root      20   0 2705384 183188  61892 S   2.5   3.0   1:10.68 streamlit
+  41193 root      20   0  681484   6644   5572 S   1.5   0.1   0:01.72 nr-ue
+  41369 root      20   0   20128  11604   6312 S   1.0   0.2   0:00.92 python
+   5230 mongodb   20   0 3748696 189440  87756 S   0.5   3.1   0:18.72 mongod
+  41271 root      20   0   17884   9968   6036 S   0.5   0.2   0:00.40 python
+      1 root      20   0   22636  13040   8632 S   0.0   0.2   0:05.78 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_workqueue_release
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_g

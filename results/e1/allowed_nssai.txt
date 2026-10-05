@@ -1,0 +1,34 @@
+RAN-UE-NGAP-ID: 1
+NSSAI - Allowed NSSAI
+Slice/service type (SST): eMBB (1)
+Slice differentiator (SD): 1
+RAN-UE-NGAP-ID: 2
+NSSAI - Allowed NSSAI
+Slice/service type (SST): eMBB (1)
+Slice differentiator (SD): 1
+RAN-UE-NGAP-ID: 3
+NSSAI - Allowed NSSAI
+Slice/service type (SST): URLLC (2)
+Slice differentiator (SD): 2
+RAN-UE-NGAP-ID: 4
+NSSAI - Allowed NSSAI
+Slice/service type (SST): MIoT (3)
+Slice differentiator (SD): 3
+RAN-UE-NGAP-ID: 5
+NSSAI - Allowed NSSAI
+Slice/service type (SST): MIoT (3)
+Slice differentiator (SD): 3
+RAN-UE-NGAP-ID: 6
+NSSAI - Allowed NSSAI
+Slice/service type (SST): eMBB (1)
+Slice differentiator (SD): 1
+Slice/service type (SST): URLLC (2)
+Slice differentiator (SD): 2
+RAN-UE-NGAP-ID: 7
+NSSAI - Allowed NSSAI
+Slice/service type (SST): eMBB (1)
+Slice differentiator (SD): 1
+Rejected S-NSSAI 1
+.... 0000 = Cause: S-NSSAI not available in the current PLMN or SNPN (0)
+Slice/service type (SST): URLLC (2)
+Slice differentiator (SD): 2

@@ -1,0 +1,11 @@
+ts,action,detail
+1791202579.724,qos,eMBB rate=150 delay=0 loss=0
+1791202579.780,qos,URLLC rate=20 delay=0 loss=0
+1791202579.998,traffic_start,"eMBB {'on': 120, 'off': 0, 'streams': 2}"
+1791202580.109,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791202580.319,traffic_start,"mIoT {'devices': 200, 'period': 10.0}"
+1791202619.859,qos,eMBB rate=30 delay=0 loss=0
+1791202659.851,qos,URLLC rate=20 delay=5 loss=0
+1791202701.824,traffic_stop,eMBB
+1791202701.839,traffic_stop,URLLC
+1791202701.860,traffic_stop,mIoT

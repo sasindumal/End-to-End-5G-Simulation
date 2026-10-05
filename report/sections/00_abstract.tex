@@ -1,0 +1,21 @@
+\begin{abstract}
+\noindent
+We designed, built and measured a software-only end-to-end 5G standalone (SA) system with
+three differentiated network slices. The use case is a smart-factory campus. The system runs
+entirely on one Apple-silicon laptop inside a Linux virtual machine. Open5GS~v2.8.0 provides the
+5G core, with a single SMF serving three S-NSSAIs and selecting one of two UPFs by DNN.
+UERANSIM~v3.2.7 provides the gNB and six concurrent UEs. Linux network namespaces separate the
+radio, core and data-network domains, so every user-plane packet really crosses N3 (GTP-U) and
+N6. The \slice{eMBB} slice (SST\,1) carries bursty video-like TCP downloads. The \slice{URLLC}
+slice (SST\,2) carries a 100\,Hz control loop on a \emph{dedicated} UPF. The \slice{mIoT} slice
+(SST\,3) carries Poisson sensor telemetry and \emph{shares} a UPF with eMBB. A Streamlit sandbox
+lets a non-builder select scenarios, bring slices up and down, start and stop traffic, retune
+slice rate, delay and loss live, watch per-slice KPIs and export run data. Packet captures
+confirm registration, authentication, Allowed-NSSAI delivery, slice-specific PFCP sessions and
+GTP-U forwarding. They also show a correct rejection for an unsubscribed slice. With the eMBB slice
+capped, URLLC kept a p99 round-trip time below 1.5\,ms with no loss during an eMBB surge.
+Live slice-parameter changes took effect within one second and affected only their slice.
+Under deliberate overload, moving URLLC onto the eMBB UPF shifted its latency distribution up
+(median per-second p99 7.9\,ms dedicated vs.\ 12.9\,ms shared). The report closes with the limits of software-only
+validation and how they bound our conclusions.
+\end{abstract}

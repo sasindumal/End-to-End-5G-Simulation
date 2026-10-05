@@ -1,0 +1,271 @@
+{
+  "signalling": [
+    {
+      "UE": "embb1",
+      "SUPI": "imsi-001010000000001",
+      "Registration [ms]": "15.3",
+      "PDU sessions": 1,
+      "PDU setup [ms]": "15.2"
+    },
+    {
+      "UE": "embb2",
+      "SUPI": "imsi-001010000000002",
+      "Registration [ms]": "12.1",
+      "PDU sessions": 1,
+      "PDU setup [ms]": "9.2"
+    },
+    {
+      "UE": "urllc1",
+      "SUPI": "imsi-001010000000003",
+      "Registration [ms]": "15.5",
+      "PDU sessions": 1,
+      "PDU setup [ms]": "7.9"
+    },
+    {
+      "UE": "miot1",
+      "SUPI": "imsi-001010000000004",
+      "Registration [ms]": "12.8",
+      "PDU sessions": 1,
+      "PDU setup [ms]": "10.8"
+    },
+    {
+      "UE": "miot2",
+      "SUPI": "imsi-001010000000005",
+      "Registration [ms]": "7.3",
+      "PDU sessions": 1,
+      "PDU setup [ms]": "10.4"
+    },
+    {
+      "UE": "multi",
+      "SUPI": "imsi-001010000000006",
+      "Registration [ms]": "13.8",
+      "PDU sessions": 2,
+      "PDU setup [ms]": "6.4, 215.4"
+    },
+    {
+      "UE": "badslice",
+      "SUPI": "imsi-001010000000007",
+      "Registration [ms]": "17.0",
+      "PDU sessions": 0,
+      "PDU setup [ms]": "rejected"
+    }
+  ],
+  "pfcp_session_est_by_upf": {
+    "127.0.0.7": 5,
+    "127.0.0.17": 2
+  },
+  "e3": [
+    {
+      "Slice": "URLLC",
+      "Phase": "idle (0\u201330 s)",
+      "RTT p50 [ms]": "1.08",
+      "RTT p99 [ms]": "1.95",
+      "worst p99 [ms]": "13.22",
+      "Loss [%]": "0.00"
+    },
+    {
+      "Slice": "URLLC",
+      "Phase": "eMBB load (30\u201390 s)",
+      "RTT p50 [ms]": "0.32",
+      "RTT p99 [ms]": "0.86",
+      "worst p99 [ms]": "1.43",
+      "Loss [%]": "0.00"
+    },
+    {
+      "Slice": "URLLC",
+      "Phase": "after (90\u2013120 s)",
+      "RTT p50 [ms]": "1.11",
+      "RTT p99 [ms]": "2.06",
+      "worst p99 [ms]": "4.90",
+      "Loss [%]": "0.00"
+    },
+    {
+      "Slice": "mIoT",
+      "Phase": "idle (0\u201330 s)",
+      "RTT p50 [ms]": "1.05",
+      "RTT p99 [ms]": "2.19",
+      "worst p99 [ms]": "18.70",
+      "Loss [%]": "0.00"
+    },
+    {
+      "Slice": "mIoT",
+      "Phase": "eMBB load (30\u201390 s)",
+      "RTT p50 [ms]": "0.33",
+      "RTT p99 [ms]": "1.05",
+      "worst p99 [ms]": "2.02",
+      "Loss [%]": "0.00"
+    },
+    {
+      "Slice": "mIoT",
+      "Phase": "after (90\u2013120 s)",
+      "RTT p50 [ms]": "1.09",
+      "RTT p99 [ms]": "2.04",
+      "worst p99 [ms]": "5.58",
+      "Loss [%]": "0.00"
+    }
+  ],
+  "e3_embb_mean_thr": 141.27017543859648,
+  "e4": {
+    "embb_before": 137.60857142857145,
+    "embb_after": 28.139999999999997,
+    "urllc_p50_before": 1.2120000000000002,
+    "urllc_p50_after": 11.678,
+    "change_times": [
+      40.13499999046326,
+      80.12700009346008
+    ],
+    "mIoT_p50_after": 1.26175
+  },
+  "e5": {
+    "per_rep": [
+      {
+        "mode": "dedicated",
+        "rep": 1,
+        "idle_p50": 0.899,
+        "load_p50": 0.512,
+        "load_p99": 4.712,
+        "load_p99_95": 41.33289999999994,
+        "worst": 107.523,
+        "loss": 4.999545454545454,
+        "embb": 49.666666666666664
+      },
+      {
+        "mode": "dedicated",
+        "rep": 2,
+        "idle_p50": 0.782,
+        "load_p50": 2.077,
+        "load_p99": 8.712,
+        "load_p99_95": 53.978399999999986,
+        "worst": 94.364,
+        "loss": 13.681818181818182,
+        "embb": 67.28518518518518
+      },
+      {
+        "mode": "dedicated",
+        "rep": 3,
+        "idle_p50": 0.725,
+        "load_p50": 1.899,
+        "load_p99": 8.832,
+        "load_p99_95": 34.30409999999997,
+        "worst": 107.085,
+        "loss": 17.131109090909092,
+        "embb": 57.30962962962963
+      },
+      {
+        "mode": "shared",
+        "rep": 1,
+        "idle_p50": 0.831,
+        "load_p50": 5.485,
+        "load_p99": 15.075,
+        "load_p99_95": 37.54579999999999,
+        "worst": 164.483,
+        "loss": 4.181818181818182,
+        "embb": 78.97777777777777
+      },
+      {
+        "mode": "shared",
+        "rep": 2,
+        "idle_p50": 0.59,
+        "load_p50": 4.089,
+        "load_p99": 13.309,
+        "load_p99_95": 58.71619999999999,
+        "worst": 89.898,
+        "loss": 5.318181818181818,
+        "embb": 11.148148148148149
+      },
+      {
+        "mode": "shared",
+        "rep": 3,
+        "idle_p50": 0.742,
+        "load_p50": 1.735,
+        "load_p99": 6.957,
+        "load_p99_95": 82.23989999999993,
+        "worst": 237.355,
+        "loss": 4.993945454545455,
+        "embb": 32.48518518518519
+      }
+    ],
+    "table": [
+      {
+        "URLLC user plane": "dedicated",
+        "runs": 3,
+        "load p50 [ms]": "1.50 \u00b1 0.86",
+        "load p99 [ms]": "7.42 \u00b1 2.34",
+        "p95 of p99 [ms]": "43.21 \u00b1 9.97",
+        "worst p99 [ms]": "107.5",
+        "loss [%]": "11.937",
+        "eMBB [Mbit/s]": "58"
+      },
+      {
+        "URLLC user plane": "shared",
+        "runs": 3,
+        "load p50 [ms]": "3.77 \u00b1 1.90",
+        "load p99 [ms]": "11.78 \u00b1 4.27",
+        "p95 of p99 [ms]": "59.50 \u00b1 22.36",
+        "worst p99 [ms]": "237.4",
+        "loss [%]": "4.831",
+        "eMBB [Mbit/s]": "41"
+      }
+    ]
+  },
+  "e5_top": {
+    "dedicated": [
+      "    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND",
+      "  40534 root      20   0   40332   2148   1564 S 303.5   0.0   1:41.22 iperf3",
+      "  40401 root      20   0  758268  10520   6980 S  33.8   0.2   0:11.60 nr-gnb",
+      "  40416 root      20   0 1140236 520624   5584 S  24.9   8.6   0:07.74 nr-ue",
+      "  40317 root      20   0  368668  33968   8668 S  22.9   0.6   0:06.12 open5gs-upfd",
+      "   1655 root      20   0 1414536  70624  16912 S   2.5   1.2   0:29.46 lima-guestagent",
+      "  25869 root      20   0 2705384 183324  61892 S   2.0   3.0   1:06.22 streamlit",
+      "  40639 root      20   0   20128  11600   6312 S   1.5   0.2   0:00.85 python",
+      "  40463 root      20   0  681484   6664   5584 S   1.0   0.1   0:01.49 nr-ue",
+      "   5230 mongodb   20   0 3748696 189436  87628 S   0.5   3.1   0:17.65 mongod"
+    ],
+    "shared": [
+      "    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND",
+      "  41264 root      20   0   40332   2148   1564 S 166.7   0.0   0:47.27 iperf3",
+      "  41266 root      20   0   40332   2156   1572 S 150.2   0.0   0:48.24 iperf3",
+      "  41051 root      20   0  368864  34312   8668 S  41.8   0.6   0:13.92 open5gs-upfd",
+      "  41130 root      20   0  758268  11500   6980 S  20.4   0.2   0:12.21 nr-gnb",
+      "  41169 root      20   0  878092 213496   5584 S   7.5   3.5   0:04.06 nr-ue",
+      "  41146 root      20   0  812556 168944   5584 S   6.5   2.8   0:05.13 nr-ue",
+      "  25869 root      20   0 2705384 183188  61892 S   2.5   3.0   1:10.68 streamlit",
+      "  41193 root      20   0  681484   6644   5572 S   1.5   0.1   0:01.72 nr-ue",
+      "  41369 root      20   0   20128  11604   6312 S   1.0   0.2   0:00.92 python"
+    ]
+  },
+  "e6": {
+    "eMBB": {
+      "thr_mean": 115.29268292682927,
+      "msgs_mean": 0.0,
+      "p50": null
+    },
+    "URLLC": {
+      "thr_mean": 0.051011111111111125,
+      "msgs_mean": 100.0,
+      "p50": 0.433
+    },
+    "mIoT": {
+      "thr_mean": 0.01665555555555556,
+      "msgs_mean": 38.36666666666667,
+      "p50": 0.4785
+    }
+  },
+  "e7": [
+    {
+      "Condition": "idle (0\u201330 s)",
+      "RTT p50 [ms]": "1.078",
+      "RTT p99 [ms]": "2.06"
+    },
+    {
+      "Condition": "CPU busy-loops, no traffic (30\u201360 s)",
+      "RTT p50 [ms]": "0.095",
+      "RTT p99 [ms]": "2.16"
+    },
+    {
+      "Condition": "idle again (60\u201390 s)",
+      "RTT p50 [ms]": "1.412",
+      "RTT p99 [ms]": "1.94"
+    }
+  ]
+}

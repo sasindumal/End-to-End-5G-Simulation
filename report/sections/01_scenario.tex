@@ -1,0 +1,41 @@
+\section{Service scenario and requirements}\label{sec:scenario}
+\paragraph{Scenario.} A manufacturer runs a private 5G SA network on its factory campus.
+Three service classes share the same radio cell and core, but their requirements are almost
+opposite~\cite{itu2083,ts22261}:
+\begin{enumerate}
+\item \textbf{Motion control / AGV coordination (\slice{URLLC}).} A PLC exchanges small
+  state/command packets with robot arms and automated guided vehicles every 10\,ms (100\,Hz,
+  64-byte payloads). 3GPP TS~22.104 places this class of cyber-physical control in the
+  low-millisecond end-to-end latency range, with very high availability~\cite{ts22104}.
+  Throughput is tiny (about 0.05\,Mbit/s); what matters is the latency \emph{tail} (p99) and
+  isolation from other traffic.
+\item \textbf{Visual inspection and AR maintenance (\slice{eMBB}).} Inspection cameras and AR
+  headsets pull high-rate video segments from an edge server. The traffic is bursty: segment
+  downloads (``on'', 20\,s) alternate with idle buffer periods (``off'', 5\,s). Tens to
+  hundreds of Mbit/s per slice are needed, with no strict latency bound. The slice must be
+  \emph{capped} so that it cannot starve the other slices.
+\item \textbf{Environmental and asset telemetry (\slice{mIoT}).} Hundreds of sensors behind
+  IoT gateways send about 100-byte JSON reports. Arrivals follow a Poisson process (mean period
+  5--10\,s per device). The requirements are connection density and delivery reliability.
+  Latency below one second is acceptable, and the aggregate rate is a few kbit/s.
+\end{enumerate}
+
+\paragraph{Derived requirements.} Table~\ref{tab:req} turns the scenario into the
+testable targets used throughout the report. The same targets drive the slice design
+(\S\ref{sec:slices}), the traffic generators (\S\ref{sec:traffic}) and the pass/fail
+reading of the results (\S\ref{sec:analysis}).
+
+\begin{table}[H]\centering\small
+\caption{Per-slice service requirements derived from the scenario (targets for a
+software testbed; the absolute values are bounded by \S\ref{sec:limits}).}\label{tab:req}
+\begin{tabularx}{\linewidth}{l>{\raggedright}X>{\raggedright}X>{\raggedright\arraybackslash}X}
+\toprule
+ & \slice{eMBB} (SST 1) & \slice{URLLC} (SST 2) & \slice{mIoT} (SST 3)\\
+\midrule
+Traffic model & TCP downlink, 2--4 flows/UE, 20\,s on / 5\,s off & UDP 64\,B request/echo, 100--200\,Hz & UDP $\approx$100\,B reports, Poisson, 200--3000 devices\\
+Key KPI & throughput, capped at slice MBR & RTT p50/p99, jitter, loss & delivery ratio, ACK latency\\
+Target & $\ge$100\,Mbit/s aggregate, $\le$ MBR & RTT p99 $<$ 10\,ms, loss $<$ 0.1\,\% & loss $<$ 1\,\%, ACK $<$ 1\,s\\
+Isolation need & must not affect others & must be unaffected by eMBB load & best effort\\
+\bottomrule
+\end{tabularx}
+\end{table}

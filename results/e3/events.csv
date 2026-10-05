@@ -1,0 +1,10 @@
+ts,action,detail
+1791202457.640,phase,URLLC+mIoT only
+1791202457.744,traffic_start,"URLLC {'rate': 100, 'size': 64}"
+1791202457.946,traffic_start,"mIoT {'devices': 500, 'period': 5.0}"
+1791202487.743,phase,eMBB saturating load on
+1791202487.948,traffic_start,"eMBB {'on': 60, 'off': 0, 'streams': 4}"
+1791202547.641,phase,eMBB off
+1791202579.645,traffic_stop,eMBB
+1791202579.645,traffic_stop,URLLC
+1791202579.646,traffic_stop,mIoT

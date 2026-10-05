@@ -1,0 +1,4 @@
+UE        SUPI                  RM-STATE       PSI  DNN       SST  SD      ADDRESS      IFACE     
+embb1     imsi-001010000000001  RM-REGISTERED  1    internet  1    000001  10.45.0.2    uesimtun0 
+embb2     imsi-001010000000002  RM-REGISTERED  1    internet  1    000001  10.45.0.3    uesimtun1 
+urllc1    imsi-001010000000003  RM-REGISTERED  1    urllc     2    000002  10.46.0.2    uesimtun2 

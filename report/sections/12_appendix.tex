@@ -1,0 +1,100 @@
+\section{Exact software versions}\label{app:versions}
+All versions were recorded by \code{scripts/versions.sh} (output in
+\code{results/versions.txt}) on the machine that produced every result in this report.
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\linewidth}{ll>{\raggedright\arraybackslash}X}
+\toprule
+Layer & Component & Version\\
+\midrule
+Host & macOS / hardware & macOS 27.0 (26A428), Apple M4, 16\,GB, arm64\\
+Host & Lima (VM manager, \code{vz} backend) & 2.2.1\\
+Guest & Ubuntu Server cloud image / kernel & 24.04.5 LTS / 6.8.0-142-generic aarch64\\
+5GC & Open5GS (all NFs, PPA build) & 2.8.0\textasciitilde noble5\\
+5GC & MongoDB & 8.0.32\\
+RAN/UE & UERANSIM (source build, gcc 13.3.0, CMake 3.28.3) & v3.2.7 (commit 1d1e154)\\
+Traffic & iperf3 & 3.16\\
+Analysis & TShark / Wireshark dissectors & 4.2.2\\
+Transport & iproute2 (\code{tc}, HTB, netem) & 6.1.0\\
+Sandbox/analysis & Python, Streamlit, pandas, matplotlib, NumPy, PyYAML & 3.12.3, 1.65.0, 3.0.6, 3.11.2, 2.5.3, 6.0.3\\
+Report & Tectonic (XeTeX-based \LaTeX{} engine) & 0.17.0\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Repository, reproduction and key configuration}\label{app:repo}
+\textbf{Shared folder / repository:} \repolink
+
+\begin{lstlisting}[title={Repository layout}]
+vm/lima-5g.yaml            VM definition (Ubuntu 24.04 arm64, 4 vCPU, 6 GiB, port 8501)
+scripts/00_provision.sh    MongoDB, Open5GS, open5gs-dbctl, UERANSIM, tshark, Python venv
+scripts/10_netns.sh        ran/dn namespaces, N2/N3 + N6 veths, ogstun*, routes, NAT
+scripts/20_core.sh         start 5GC (MODE=dedicated|shared)      scripts/stop_core.sh
+scripts/30_subscribers.sh  7 subscribers + per-slice 5QI/ARP/AMBR
+scripts/40_ran.sh          gNB + UEs in netns ran                 scripts/stop_ran.sh
+scripts/50_capture.sh      tshark N2/N3/N4/SBI                    scripts/ue_table.sh
+scripts/slice_ctl.sh       slice up/down, live MBR/delay/loss     scripts/ue_cfg.py
+scripts/60_sandbox.sh      Streamlit sandbox on :8501             scripts/versions.sh
+configs/open5gs/*.yaml     NF configs (+ smf-shared, upf-a-shared for E5)
+configs/ueransim/          gnb.yaml, gen_ues.sh, ue-*.yaml       configs/slices.yaml
+traffic/                   embb.py, urllc_probe.py, miot_client.py, DN servers, kpi.py
+sandbox/                   app.py (UI), testbed.py (control library)
+experiments/               run_all.py (E1-E6), cpu_control.py (E7)
+analysis/analyze.py        figures + LaTeX tables from results/
+results/                   raw KPI CSVs, event logs, pcap, NF/UE logs, summary.json
+tools/screenshot_sandbox.py  report screenshots of the sandbox via Chrome DevTools
+report/                    this report (main.tex, sections/, figures/, generated/)
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, title={Rebuild and run from a clean Mac}]
+brew install lima                                  # once (requires accepted Xcode licence)
+limactl create --name=e2e5g vm/lima-5g.yaml && limactl start e2e5g
+limactl shell e2e5g -- bash /e2e5g/scripts/00_provision.sh
+limactl shell e2e5g -- sudo bash -c 'cd /e2e5g/scripts && ./10_netns.sh && ./20_core.sh \
+   && ./30_subscribers.sh && ./40_ran.sh && ./slice_ctl.sh init \
+   && ../traffic/dn_servers.sh && ./60_sandbox.sh'      # then open http://localhost:8501
+limactl shell e2e5g -- sudo /opt/e2e5g-venv/bin/python /e2e5g/experiments/run_all.py
+limactl shell e2e5g -- /opt/e2e5g-venv/bin/python /e2e5g/analysis/analyze.py
+\end{lstlisting}
+
+\begin{lstlisting}[title={configs/open5gs/smf.yaml (excerpt): slice-aware SMF and UPF selection by DNN}]
+  pfcp:
+    client:
+      upf:
+        - address: 127.0.0.7          # UPF-A (shared)
+          dnn: [internet, iot]
+        - address: 127.0.0.17         # UPF-B (dedicated URLLC)
+          dnn: [urllc]
+  info:
+    - s_nssai:
+        - {sst: 1, sd: 000001, dnn: [internet]}
+        - {sst: 2, sd: 000002, dnn: [urllc]}
+        - {sst: 3, sd: 000003, dnn: [iot]}
+  session:
+    - {subnet: 10.45.0.0/16, gateway: 10.45.0.1, dnn: internet}
+    - {subnet: 10.46.0.0/16, gateway: 10.46.0.1, dnn: urllc}
+    - {subnet: 10.47.0.0/16, gateway: 10.47.0.1, dnn: iot}
+\end{lstlisting}
+
+\begin{lstlisting}[title={configs/open5gs/upf-b.yaml (excerpt): dedicated URLLC user plane}]
+upf:
+  pfcp:    {server: [{address: 127.0.0.17}]}
+  gtpu:    {server: [{address: 10.10.0.3}]}       # separate N3 endpoint
+  session: [{subnet: 10.46.0.0/16, gateway: 10.46.0.1, dnn: urllc, dev: ogstun2}]
+\end{lstlisting}
+
+\begin{lstlisting}[title={configs/ueransim/ue-multi.yaml (excerpt): one UE, two slices}]
+supi: 'imsi-001010000000006'
+sessions:
+  - {type: 'IPv4', apn: 'internet', slice: {sst: 1, sd: 0x000001}}
+  - {type: 'IPv4', apn: 'urllc',    slice: {sst: 2, sd: 0x000002}}
+configured-nssai: [{sst: 1, sd: 0x000001}, {sst: 2, sd: 0x000002}]
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, title={scripts/slice\_ctl.sh (excerpt): live per-slice MBR and delay/loss}]
+# downlink: HTB class + netem on the slice's UPF tun device
+tc class change dev "$tun" parent 1: classid 1:10 htb rate "${rate}mbit" ceil "${rate}mbit" burst 64k
+tc qdisc  change dev "$tun" parent 1:10 handle 10: netem delay ${delay}ms loss ${loss}% limit 10000
+# uplink: one HTB class per UE pool on the N6 veth, selected by source subnet
+tc filter add dev n6-core parent 1: protocol ip prio 1 u32 match ip src "$subnet" flowid 1:$cls
+\end{lstlisting}

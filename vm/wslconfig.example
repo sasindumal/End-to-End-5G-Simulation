@@ -1,0 +1,7 @@
+# Windows equivalent of vm/lima-5g.yaml (4 vCPU / 6 GiB).
+# Copy to  C:\Users\<you>\.wslconfig  then run  wsl --shutdown  in PowerShell.
+[wsl2]
+processors=4
+memory=6GB
+# keep localhost forwarding on so http://localhost:8501 reaches the sandbox from Windows
+localhostForwarding=true
