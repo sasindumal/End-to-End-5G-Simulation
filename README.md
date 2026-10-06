@@ -120,12 +120,44 @@ Inside the VM / WSL (as root):
 - `ip netns exec ran ping -I uesimtun0 192.168.100.2`: UE → data network
 - `MODE=shared bash /e2e5g/scripts/20_core.sh`: put URLLC on the shared UPF-A
 
+## Removing the VM and getting the disk space back
+
+Removing the VM does **not** delete this project folder: code, `results/` and `report/` stay.
+Everything inside the VM can be rebuilt later with the quick-start steps.
+
+### macOS
+
+The script stops and deletes the `e2e5g` VM (~5.4 GB), clears Lima's download cache with the
+Ubuntu image (~2.6 GB) and uninstalls Lima. See what it would remove first:
+```bash
+bash scripts/uninstall_mac.sh --dry-run
+```
+Then remove everything (it asks you to type `delete` to confirm):
+```bash
+bash scripts/uninstall_mac.sh
+```
+To keep Lima installed for a later rebuild, add `--keep-lima`; to skip the prompt, add `--yes`.
+
+### Windows (WSL2)
+
+This deletes the whole Ubuntu-24.04 distribution, including anything else you stored in it.
+In PowerShell:
+```powershell
+wsl --shutdown
+```
+```powershell
+wsl --unregister Ubuntu-24.04
+```
+Then delete `C:\Users\<you>\.wslconfig` if you created it for this project. If you no longer
+need WSL at all, `wsl --uninstall` removes it too.
+
 ## Layout
 
 ```
 vm/            Lima VM definition (macOS), wslconfig.example (Windows)
 scripts/       provisioning, topology, core/RAN start-stop, subscribers, capture, slice control,
-               wsl_setup.sh (Windows/WSL2 preparation and kernel checks)
+               wsl_setup.sh (Windows/WSL2 preparation and kernel checks),
+               uninstall_mac.sh (delete the VM and Lima, free the disk space)
 configs/       Open5GS NF configs, UERANSIM gNB/UE configs, slices.yaml
 traffic/       per-slice traffic generators + data-network servers
 sandbox/       Streamlit app (app.py) + control library (testbed.py)
