@@ -1,9 +1,32 @@
 \section{End-to-end architecture}\label{sec:arch}
-Figure~\ref{fig:arch} shows the deployed system. A macOS host (Apple M4, 16\,GB) runs
-Lima~\cite{lima} with Apple's Virtualization framework. Lima boots one Ubuntu~24.04 arm64 VM
-(4 vCPU, 6\,GB, kernel 6.8), which supplies the Linux features that 5G software needs (SCTP,
-TUN, netns, tc). Inside the VM, three network namespaces model the three administrative
-domains:
+Figure~\ref{fig:arch} shows the deployed system. All 5G software needs Linux kernel features
+(SCTP, TUN, network namespaces, tc), so the testbed runs inside one Ubuntu~24.04 environment
+with 4 vCPU and 6\,GB. The host operating system only provides that environment. Two hosts
+are supported (Table~\ref{tab:hosts}), and everything from the provisioning script upwards is
+identical on both. \textbf{All results in this report were measured on the macOS host}
+(Apple M4, 16\,GB) running Lima~\cite{lima} with Apple's Virtualization framework (Ubuntu
+arm64, kernel 6.8). On Windows, WSL2~\cite{wsl} provides the same Ubuntu release in the PC's
+own architecture (normally amd64).
+
+\begin{table}[H]\centering\small
+\caption{Supported host platforms. Only the layer below Ubuntu differs.}\label{tab:hosts}
+\begin{tabularx}{\linewidth}{>{\raggedright}p{2.9cm}>{\raggedright}X>{\raggedright\arraybackslash}X}
+\toprule
+ & macOS (used for all results) & Windows 10/11\\
+\midrule
+Virtualisation & Lima 2.2.1, \code{vz} (Apple Virtualization.framework) & WSL2 (Hyper-V lightweight VM)\\
+Linux guest & Ubuntu 24.04, arm64, kernel 6.8 & Ubuntu 24.04, amd64 (arm64 on Windows on ARM), Microsoft WSL kernel\\
+Resources & \code{vm/lima-5g.yaml}: 4 vCPU, 6\,GiB & \code{vm/wslconfig.example}: 4 vCPU, 6\,GB\\
+Repository at \code{/e2e5g} & virtiofs mount of the Mac folder & symlink to a clone inside the WSL filesystem\\
+Preparation & \code{limactl create/start} & \code{scripts/wsl\_setup.sh} (systemd, path, line endings, live kernel checks)\\
+Sandbox URL & \url{http://localhost:8501} (Lima port forward) & \url{http://localhost:8501} (WSL localhost forwarding)\\
+Removal & \code{scripts/uninstall\_mac.sh} & \code{wsl --unregister Ubuntu-24.04}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent Inside the Linux environment, three network namespaces model the three
+administrative domains:
 
 \begin{itemize}
 \item \textbf{\code{ran}}: the UERANSIM gNB and all UEs. Each UE PDU session appears as a
@@ -82,7 +105,8 @@ domains:
 \end{tikzpicture}}
 \caption{Deployed end-to-end architecture with all interfaces labelled. The colour of each
 user-plane path matches the slice colour used in all plots (\slice{eMBB} blue, \slice{URLLC}
-orange, \slice{mIoT} green). Everything runs inside one Ubuntu VM on the Mac host.}
+orange, \slice{mIoT} green). Everything runs inside one Ubuntu~24.04 environment on the host
+(Lima on macOS, WSL2 on Windows).}
 \label{fig:arch}
 \end{figure}
 

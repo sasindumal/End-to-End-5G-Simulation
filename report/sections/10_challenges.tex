@@ -1,5 +1,5 @@
 \section{Challenges and resolutions}\label{sec:challenges}
-\begin{table}[H]\centering\small
+\begin{table}[H]\centering\footnotesize
 \caption{Problems met during implementation and integration, in the order encountered.}\label{tab:challenges}
 \begin{tabularx}{\linewidth}{>{\raggedright}p{4.3cm}>{\raggedright}X>{\raggedright\arraybackslash}p{4.4cm}}
 \toprule
@@ -21,6 +21,29 @@ eMBB throughput spikes in plots & iperf3's trailing partial interval and duplica
 URLLC faster under load than idle & VM CPU idle-state wake-up latency & control experiment E7; compare only like-for-like CPU states\\
 First E5 run inconclusive & TCP eMBB load varied 270--1600\,Mbit/s between runs (AMBR, TCP dynamics), confounding the comparison & fixed-rate UDP load, AMBR lifted, 3 alternating repetitions per mode\\
 Stale UE routes after restarts & UERANSIM leaves its \code{ip rule} entries in netns \code{ran} & \code{stop\_ran.sh} flushes them\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Supporting both macOS and Windows.} The testbed was built on a Mac, but group
+members use Windows PCs as well, so it was adapted to run on both.
+Table~\ref{tab:challenges-win} lists the problems this raised. They were solved in the
+scripts, so both platforms run the same 5G configuration.
+
+\begin{table}[H]\centering\footnotesize
+\caption{Problems met when making the testbed run on Windows as well as macOS.}\label{tab:challenges-win}
+\begin{tabularx}{\linewidth}{>{\raggedright}p{4.3cm}>{\raggedright}X>{\raggedright\arraybackslash}p{4.4cm}}
+\toprule
+Challenge & Root cause & Resolution\\
+\midrule
+Lima / \code{vz} not available on Windows & Apple Virtualization.framework exists only on macOS; Lima's Windows mode only wraps WSL2 & WSL2 with the same Ubuntu~24.04 and the same 4 vCPU / 6\,GB (\code{vm/wslconfig.example})\\
+Different CPU architecture & Mac is arm64, most Windows PCs are amd64; the MongoDB APT line was hard-coded to arm64 & \code{00\_provision.sh} uses \code{dpkg --print-architecture}; Open5GS PPA, MongoDB and UERANSIM exist for both\\
+Scripts break after a Windows checkout & Git on Windows converts LF to CRLF, which bash cannot run & \code{.gitattributes} forces LF for scripts/configs; \code{wsl\_setup.sh} detects any CRLF\\
+MongoDB service would not start & WSL distributions run without systemd by default & \code{wsl\_setup.sh} writes \code{systemd=true} to \code{/etc/wsl.conf} and asks for \code{wsl --shutdown}\\
+Every script expects \code{/e2e5g} & on macOS this path is the Lima mount; WSL has no such mount & \code{wsl\_setup.sh} links the clone to \code{/e2e5g} and warns if it lives under \code{/mnt/c} (slow, permission problems)\\
+Unknown kernel support in WSL & SCTP, \code{sch\_htb} and \code{sch\_netem} depend on the WSL kernel build & live tests in \code{wsl\_setup.sh} before installing; fallback: \code{wsl --update} or a Hyper-V/VirtualBox Ubuntu VM\\
+Report screenshots tied to macOS & capture tool used the macOS Chrome path & tool picks the Chrome path per OS (\code{CHROME} override)\\
+Freeing the disk afterwards & the VM and cached images take $\approx$8\,GB & \code{uninstall\_mac.sh} (macOS) and \code{wsl --unregister} (Windows), documented in the README\\
 \bottomrule
 \end{tabularx}
 \end{table}

@@ -1,7 +1,7 @@
 \section{Sandbox application}\label{sec:sandbox}
 The sandbox (\code{sandbox/app.py}, Streamlit~1.65~\cite{streamlit}) is the single control
 surface for someone who did not build the system. It runs as root inside the VM and is
-opened on the Mac at \url{http://localhost:8501}. Its controls map one-to-one onto the
+opened in a browser on the host (Mac or Windows) at \url{http://localhost:8501}. Its controls map one-to-one onto the
 required capabilities (Table~\ref{tab:sandbox}). Every action goes through
 \code{sandbox/testbed.py}. That is the same library the scripted experiments use, so a result
 seen in the demo can be reproduced exactly by script. Every action is also appended to the
@@ -23,14 +23,14 @@ Export run data & \emph{Export run (ZIP)} & KPI CSVs, event log, UE/PDU table, c
 \end{tabularx}
 \end{table}
 
-\begin{figure}[H]\centering
-\includegraphics[width=\linewidth]{screenshots/sandbox_top.png}
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.86\linewidth]{screenshots/sandbox_top.png}
 \caption{Sandbox during scenario S1. Each slice card shows its S-NSSAI, DNN and UPF, its admin
 and traffic state, and the live parameter form. The 5GC NF health is shown in the sidebar.}
 \label{fig:sandbox1}
 \end{figure}
-\begin{figure}[H]\centering
-\includegraphics[width=\linewidth]{screenshots/sandbox_kpis.png}
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.86\linewidth]{screenshots/sandbox_kpis.png}
 \caption{Sandbox live KPI panel, UE/PDU-session table and event log after a live change of the
 eMBB MBR.}\label{fig:sandbox2}
 \end{figure}

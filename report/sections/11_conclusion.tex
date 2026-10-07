@@ -1,7 +1,8 @@
 \section{Conclusions and future work}\label{sec:conclusion}
 We built a complete, reproducible 5G SA system with three differentiated slices on a single
 laptop, using only open-source software. Open5GS and UERANSIM ran natively on arm64 inside a
-Lima VM, and namespaces enforced a realistic RAN/core/DN separation. The scenario,
+Lima VM on macOS, and the same scripts also target Windows through WSL2. Namespaces enforced
+a realistic RAN/core/DN separation. The scenario,
 architecture, traffic and measurements form one thread. The factory's three service classes
 became three S-NSSAIs with their own DNN, pool, QoS profile and, for URLLC, their own UPF. The
 signalling shows each UE receiving exactly its subscribed Allowed NSSAI and each PDU session

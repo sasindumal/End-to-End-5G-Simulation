@@ -1,5 +1,5 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[a4paper,margin=2.1cm]{geometry}
+\usepackage[a4paper,margin=2.1cm,bottom=2.5cm,footskip=1.0cm]{geometry} % page number sits inside the border
 \usepackage{fontspec}   % Tectonic = XeTeX: Unicode (±, –, ×, →) in generated tables
 \usepackage{amsmath}
 \usepackage{microtype}
@@ -16,10 +16,23 @@
 \usepackage{float}
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows.meta,backgrounds,calc,shapes.geometric}
+\usepackage{eso-pic}
+\usepackage{titlesec}
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
 
 \input{members.tex}
+
+% Page border on every page (same style as the EC9110 lab reports): thin frame 10 mm from the edge
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{\put(\LenToUnit{10mm},\LenToUnit{10mm}){%
+    \begin{tikzpicture}\draw[line width=0.5pt] (0,0) rectangle (\paperwidth-20mm,\paperheight-20mm);\end{tikzpicture}}}}
+
+% Section headings in bold capitals, as in the lab reports
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.7em}{\MakeUppercase}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{14pt plus 3pt minus 2pt}{6pt plus 2pt}
+\titlespacing*{\subsection}{0pt}{10pt plus 2pt minus 2pt}{4pt plus 1pt}
 
 % Palette (same categorical slots as the plots: eMBB, URLLC, mIoT)
 \definecolor{embb}{HTML}{2A78D6}
@@ -42,17 +55,40 @@
 \newcommand{\code}[1]{\texttt{\small #1}}
 \newcommand{\slice}[1]{\textsf{#1}}
 
-\title{\textbf{End-to-End 5G Network Slicing on a Software-Only Testbed}\\[4pt]
-\large Open5GS 5GC, UERANSIM RAN/UE and per-slice user planes for a smart-factory scenario}
-\author{\groupname\\[2pt]\small \memberA, \memberB, \memberC, \memberD,\\
-\small \memberE, \memberF, \memberG, \memberH}
-\date{October 2026}
-
 \begin{document}
-\maketitle
-\input{sections/00_abstract}
-\tableofcontents
+% ------------------------------------------------------------------ cover page
+\begin{titlepage}
+\centering
+\vspace*{3.2cm}
+{\LARGE\bfseries \coursecode\par}
 \vspace{4pt}
+{\LARGE\bfseries \MakeUppercase{\coursename}\par}
+\vspace{22pt}
+{\large\bfseries \MakeUppercase{\assignmentname}\par}
+\vfill
+\begin{flushright}
+\small
+\begin{tabular}{@{}r@{\hspace{10pt}}r@{}}
+\textbf{\MakeUppercase{\nameA}} & \idA\\
+\textbf{\MakeUppercase{\nameB}} & \idB\\
+\textbf{\MakeUppercase{\nameC}} & \idC\\
+\textbf{\MakeUppercase{\nameD}} & \idD\\
+\textbf{\MakeUppercase{\nameE}} & \idE\\
+\textbf{\MakeUppercase{\nameF}} & \idF\\
+\textbf{\MakeUppercase{\nameG}} & \idG\\
+\textbf{\MakeUppercase{\nameH}} & \idH\\
+\end{tabular}\par
+\vspace{8pt}
+\MakeUppercase{\semester}\par
+\vspace{4pt}
+\MakeUppercase{\submissiondate}\par
+\end{flushright}
+\vspace*{0.6cm}
+\end{titlepage}
+\setcounter{page}{1}
+% ------------------------------------------------------------------ body
+\tableofcontents
+\clearpage
 \input{sections/01_scenario}
 \input{sections/02_slices}
 \input{sections/03_architecture}
@@ -64,8 +100,7 @@
 \input{sections/09_limitations}
 \input{sections/10_challenges}
 \input{sections/11_conclusion}
+\clearpage
 \bibliographystyle{unsrt}
 \bibliography{refs}
-\appendix
-\input{sections/12_appendix}
 \end{document}

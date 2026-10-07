@@ -35,6 +35,12 @@ subscription enforcement, per-slice UPF anchoring and the effect of the slice co
 \item \textbf{Scale.} Six UEs and 3000 virtual sensors behind two gateway UEs do not reproduce
   the RACH and signalling load of thousands of real devices. The mIoT result validates only
   the slice's user plane.
+\item \textbf{One measured host.} Every number comes from the macOS host. A Windows PC runs
+  the same software on a different CPU, hypervisor (Hyper-V) and kernel (Microsoft's WSL
+  kernel), so its absolute latencies, throughput ceilings and CPU artefacts will differ. The
+  Windows path is supported by the scripts. Its kernel prerequisites are checked by
+  \code{wsl\_setup.sh}, which was itself validated in the Linux VM, but the experiments have
+  not yet been repeated on a Windows PC.
 \end{enumerate}
 
 \noindent\textbf{Validity of conclusions.} The claims that \emph{do} hold:

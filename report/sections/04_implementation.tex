@@ -1,8 +1,9 @@
 \section{Implementation by component}\label{sec:impl}
 Each component has a named owner who configured it and validated it on its own before
 integration (Table~\ref{tab:owners}). All configuration, scripts, sandbox and analysis code
-are in the repository (Appendix~\ref{app:repo}). The whole testbed is rebuilt from a clean
-Mac with \code{limactl create} plus five scripts.
+are in the shared repository, \repolink, whose \code{README.md} gives the step-by-step setup
+for both platforms. The whole testbed is rebuilt from a clean Mac (Lima) or Windows PC (WSL2)
+with the same five scripts.
 
 \begin{table}[H]\centering\small
 \caption{Component ownership, deliverables and individual validation evidence.}\label{tab:owners}
@@ -17,13 +18,13 @@ UE \& provisioning & \memberD & \code{gen\_ues.sh} (7 UE configs), \code{30\_sub
 Traffic generation & \memberE & \code{embb.py}, \code{urllc\_probe.py}, \code{miot\_client.py}, DN servers & per-slice KPI CSVs; on/off, periodic and Poisson profiles verified (Fig.~\ref{fig:e6})\\
 Signalling analysis & \memberF & \code{50\_capture.sh}, \code{analysis/analyze.py} & decoded call flow, timing and SBI tables (\S\ref{sec:e2})\\
 Sandbox application & \memberG & \code{sandbox/app.py}, \code{testbed.py}, \code{slice\_ctl.sh} & every control exercised from the UI (\S\ref{sec:sandbox})\\
-Platform \& integration & \memberH & \code{vm/lima-5g.yaml}, \code{00\_provision.sh}, \code{experiments/run\_all.py}, \code{versions.sh} & clean rebuild; scripted E1--E6\\
+Platform \& integration & \memberH & \code{vm/lima-5g.yaml}, \code{vm/wslconfig.example}, \code{wsl\_setup.sh}, \code{00\_provision.sh}, \code{experiments/run\_all.py}, \code{versions.sh} & clean rebuild; scripted E1--E7; Windows checks\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \subsection{Core network -- control plane (\memberA)}
-Open5GS~2.8.0~\cite{open5gs} was installed from the project's PPA (arm64 build). The NFs are
+Open5GS~2.8.0~\cite{open5gs} was installed from the project's PPA (arm64 build on the Mac; the same PPA ships amd64 for Windows PCs). The NFs are
 not run as the packaged systemd units. \code{20\_core.sh} starts them in dependency order
 (NRF $\rightarrow$ SCP $\rightarrow$ AUSF/UDM/UDR/PCF/NSSF/BSF $\rightarrow$ UPFs
 $\rightarrow$ SMF $\rightarrow$ AMF) from the repository configs, so that every parameter is
@@ -85,10 +86,37 @@ with \code{nas-5gs.null\_decipher} and \code{-d tcp.port==7777,http2}. It extrac
 procedure timing (keyed on RAN-UE-NGAP-ID and SUCI MSIN), PFCP sessions per UPF and SBI
 operations. It also draws the message ladder and every KPI figure from the CSVs.
 
+\subsection{Sandbox application (\memberG)}
+The sandbox has three layers, so the user interface never touches the testbed directly:
+\begin{itemize}
+\item \textbf{UI} (\code{sandbox/app.py}, Streamlit). It renders the slice cards, the live
+  parameter forms, the KPI charts, the UE/PDU-session table and the event log. The KPI panel
+  is a fragment that re-runs every 2\,s, so only the charts refresh while the rest of the
+  page stays still.
+\item \textbf{Control library} (\code{sandbox/testbed.py}). It exposes the actions: apply a
+  scenario, slice up/down, start/stop traffic, set QoS, read KPIs and export a run. It starts
+  traffic generators in the \code{ran} namespace as separate process groups bound to each
+  UE's current PDU address, so ``stop'' always removes every child process. Every action is
+  appended to the run's \code{events.csv}.
+\item \textbf{Slice control} (\code{scripts/slice\_ctl.sh}). It applies the tc HTB/netem
+  changes and the deregister/re-attach cycle for slice up/down. Administrative state lives in
+  files under \code{/run/e2e5g}, so a page reload or a second browser sees the same state.
+\end{itemize}
+The experiment runner uses the same library, so every sandbox action can be reproduced by
+script. Section~\ref{sec:sandbox} shows the resulting interface.
+
 \subsection{Platform and integration (\memberH)}
-\code{vm/lima-5g.yaml} defines the VM. It mounts the repository at \code{/e2e5g} (virtiofs)
-and forwards port 8501 (sandbox) to the Mac. \code{00\_provision.sh} is idempotent and
-installs every dependency. \code{experiments/run\_all.py} restarts the testbed into a known
+Every script assumes the repository at \code{/e2e5g} and an Ubuntu~24.04 environment, so
+the host only has to provide those two things. On macOS, \code{vm/lima-5g.yaml} defines the
+VM, mounts the repository at \code{/e2e5g} (virtiofs) and forwards port 8501 (sandbox) to the
+Mac. On Windows, WSL2 runs Ubuntu~24.04 with the resources in \code{vm/wslconfig.example}, and
+\code{scripts/wsl\_setup.sh} prepares it. The script enables systemd, links the clone to
+\code{/e2e5g} and rejects CRLF line endings. It also live-tests every kernel feature the
+testbed needs (SCTP sockets, netns, veth, TUN, tc HTB and netem) before anything is
+installed. \code{00\_provision.sh} is idempotent, detects the CPU architecture (arm64 or
+amd64) and installs every dependency on either platform. \code{experiments/run\_all.py} restarts the testbed into a known
 state before each experiment and drives the same \code{testbed.py} API that the sandbox uses,
-so demo and measurements share one code path. \code{versions.sh} records the exact versions
-(Appendix~\ref{app:versions}).
+so demo and measurements share one code path. \code{versions.sh} records the exact version of every
+component in \code{results/versions.txt} (Open5GS 2.8.0, MongoDB 8.0.32, UERANSIM v3.2.7,
+iperf3 3.16, TShark 4.2.2, iproute2 6.1.0, Python 3.12.3, Streamlit 1.65.0; guest Ubuntu
+24.04.5 with kernel 6.8.0; host macOS 27.0 with Lima 2.2.1).
