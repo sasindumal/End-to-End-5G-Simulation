@@ -120,6 +120,25 @@ Inside the VM / WSL (as root):
 - `ip netns exec ran ping -I uesimtun0 192.168.100.2`: UE → data network
 - `MODE=shared bash /e2e5g/scripts/20_core.sh`: put URLLC on the shared UPF-A
 
+## Restarting / Troubleshooting
+
+If the network namespaces become corrupted or the start scripts fail with `Cannot find device`, you must completely shut down the environment to get a clean slate.
+
+**macOS (Lima)**:
+```bash
+limactl stop e2e5g && limactl start e2e5g
+```
+
+**Windows (WSL2)**:
+1. Open a **Windows PowerShell** window (NOT Ubuntu) and kill the VM:
+   ```powershell
+   wsl --shutdown
+   ```
+2. Reopen your Ubuntu terminal and run the start sequence normally:
+   ```bash
+   sudo bash -c 'cd /e2e5g/scripts && ./10_netns.sh && ./20_core.sh && ./30_subscribers.sh && ./40_ran.sh && ./slice_ctl.sh init && ../traffic/dn_servers.sh && ./60_sandbox.sh'
+   ```
+
 ## Removing the VM and getting the disk space back
 
 Removing the VM does **not** delete this project folder: code, `results/` and `report/` stay.
