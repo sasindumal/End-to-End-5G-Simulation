@@ -72,7 +72,7 @@ script below checks the kernel features the testbed needs before you install any
 3. In Ubuntu, clone the repo **inside the Linux filesystem** (not under `/mnt/c`, which is slow
    and breaks permissions):
    ```bash
-   cd ~ && git clone <repo-url> End-to-End-5G-Simulation && cd End-to-End-5G-Simulation
+   cd ~ && git clone https://github.com/sasindumal/End-to-End-5G-Simulation.git && cd End-to-End-5G-Simulation
    ```
 4. Run the WSL setup check. It turns on systemd (needed for MongoDB), links the repo to
    `/e2e5g` (the path every script uses), checks for CRLF line endings, and live-tests SCTP,
